@@ -3,14 +3,29 @@ services:
     image: postgres:16
     container_name: sdp_postgres
     environment:
-      POSTGRES_USER: sdp
-      POSTGRES_PASSWORD: sdp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
       POSTGRES_DB: sdpwarehouse
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-    - sdp_pgdata:/var/lib/postgresql/data
+      - sdp_pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: sdp_minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - sdp_minio_data:/data
     restart: unless-stopped
 
 volumes:
   sdp_pgdata:
+  sdp_minio_data:
