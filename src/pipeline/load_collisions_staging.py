@@ -12,3 +12,6 @@ class StagingDataConfig:
     timestamp_columns: tuple[str, ...]
     url_env_var: str
 
+COLLISIONS_STAGING_BASIC = StagingDataConfig(
+    name="collisions_staging_basic",
+)
