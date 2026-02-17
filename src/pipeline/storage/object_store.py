@@ -10,14 +10,7 @@ class ObjectStore:
         self.secret_key = os.getenv("OBJECT_STORE_SECRET_KEY", "minioadmin")
         self.bucket_name = os.getenv("OBJECT_STORE_BUCKET_NAME", "sdpipe")
 
-        self.client = boto3.client(
-            "s3",
-            endpoint_url=self.endpoint,
-            aws_access_key_id=self.access_key,
-            aws_secret_access_key=self.secret_key,
-            config=Config(signature_version="s3v4"),
-            region_name="us-east-1"
-        )
+        self.client = boto3.client("s3", endpoint_url=self.endpoint, aws_access_key_id=self.access_key, aws_secret_access_key=self.secret_key, config=Config(signature_version="s3v4"), region_name="us-east-1")
 
     def list_objects(self, prefix: str = ""):
         try:
@@ -28,7 +21,7 @@ class ObjectStore:
             print(f"Error listing objects with prefix '{prefix}': {e}")
             return []
     
-    def download_object(self, key:str, destination: str):
+    def download_object(self, key: str, destination: str):
         try:
             self.client.download_file(self.bucket_name, key, destination)
             print(f"Downloaded object '{key}' to '{destination}'")
