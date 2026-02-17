@@ -5,8 +5,8 @@ from dataclasses import dataclass
 class StagingDataConfig:
     name: str
     table_name: str
-    url_env_var: str
-    file_env_var: str
+    source_path_env_var: str
+    daily_file_name: str
     columns: tuple[str, ...]
     required_columns: tuple[str, ...]
     integer_columns: tuple[str, ...] = ()
@@ -15,8 +15,8 @@ class StagingDataConfig:
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
     table_name="staging.collisions_basic",
-    url_env_var="COLLISIONS_BASIC_URL",
-    file_env_var="COLLISIONS_BASIC_FILE",
+    source_path_env_var="COLLISIONS_BASIC_FILE",
+    daily_file_name="collisions_basic.csv",
     columns = (
         "report_id",
         "date_time",
@@ -50,8 +50,8 @@ COLLISIONS_STAGING_BASIC = StagingDataConfig(
 COLLISIONS_STAGING_DETAILS = StagingDataConfig(
     name="staging_collisions_details",
     table_name="staging.collisions_details",
-    url_env_var="COLLISIONS_DETAILS_URL",
-    file_env_var="COLLISIONS_DETAILS_FILE",
+    source_path_env_var="COLLISIONS_DETAILS_FILE",
+    daily_file_name="collisions_details.csv",
     columns=(
         "report_id",
         "date_time",
