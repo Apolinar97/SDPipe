@@ -13,7 +13,7 @@ class StagingDataConfig:
     
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
-    table_name="staging.collisions_basic",
+    table_name="raw.collisions_basic",
     daily_file_name="pd_collisions_datasd.csv",
     columns = (
         "report_id",
@@ -47,7 +47,7 @@ COLLISIONS_STAGING_BASIC = StagingDataConfig(
 
 COLLISIONS_STAGING_DETAILS = StagingDataConfig(
     name="staging_collisions_details",
-    table_name="staging.collisions_details",
+    table_name="raw.collisions_details",
     daily_file_name="pd_collisions_details_datasd.csv",
     columns=(
         "report_id",

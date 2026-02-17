@@ -1,7 +1,7 @@
-CREATE SCHEMA IF NOT EXISTS staging;
+CREATE SCHEMA IF NOT EXISTS raw;
 
 CREATE TABLE
-    IF NOT EXISTS staging.collisions_basic (
+    IF NOT EXISTS raw.collisions_basic (
         report_id TEXT NOT NULL,
         date_time TIMESTAMP NOT NULL,
         police_beat integer NOT NULL,
@@ -23,8 +23,8 @@ CREATE TABLE
         load_ts TIMESTAMPTZ NOT NULL DEFAULT now ()
     );
 
-CREATE INDEX IF NOT EXISTS ix_stg_basic_report_id ON staging.collisions_basic (report_id);
+CREATE INDEX IF NOT EXISTS ix_stg_basic_report_id ON raw.collisions_basic (report_id);
 
-CREATE INDEX IF NOT EXISTS ix_stg_basic_snapshot_dt ON staging.collisions_basic (snapshot_dt);
+CREATE INDEX IF NOT EXISTS ix_stg_basic_snapshot_dt ON raw.collisions_basic (snapshot_dt);
 
-CREATE INDEX IF NOT EXISTS ix_stg_basic_report_snapshot ON staging.collisions_basic (report_id, snapshot_dt);
+CREATE INDEX IF NOT EXISTS ix_stg_basic_report_snapshot ON raw.collisions_basic (report_id, snapshot_dt);
