@@ -1,9 +1,11 @@
 import os
+import io
 import csv
 import logging
 from datetime import date
 from pipeline.staging.data_config import STAGING_DATASETS, StagingDataConfig
 from pipeline.db import get_connection
+from pipeline.storage.object_store import ObjectStore
 
 logger = logging.getLogger(__name__)
 
@@ -26,23 +28,14 @@ def _get_run_date() -> date:
     except ValueError as exc:
         raise RuntimeError(f"STAGING_RUN_DATE must be in YYYY-MM-DD format, got: {raw!r}") from exc
 
-# Returns a tuple of (source_file_path, source_file_name)
-def _resolve_source_file(config: StagingDataConfig, run_date: date) -> tuple[str, str]:
-    source_path_env = config.source_path_env_var
-    source_path = os.getenv(source_path_env)
-    if not source_path:
-        raise RuntimeError(f"{source_path_env} is required for dataset {config.name}. This loader only reads local files.")
-
-    if os.path.isfile(source_path):
-        return source_path, os.path.basename(source_path)
-
-    if os.path.isdir(source_path):
-        dated_file_path = os.path.join(source_path, run_date.isoformat(), config.daily_file_name)
-        if not os.path.isfile(dated_file_path):
-            raise RuntimeError(f"No file found for dataset {config.name} at expected path: {dated_file_path}")
-        return dated_file_path, os.path.basename(dated_file_path)
-
-    raise RuntimeError(f"{source_path_env} must be an existing file or directory path, got: {source_path}")
+def _resolve_source_key(config: StagingDataConfig, run_date: date, store: ObjectStore) -> str:
+    source_root = os.getenv("STAGING_SOURCE_ROOT", "").rstrip("/")
+    if not source_root:
+        raise RuntimeError("STAGING_SOURCE_ROOT is required for staging load.")
+    key = f"{source_root}/{run_date.isoformat()}/{config.daily_file_name}"
+    if not store.object_exists(key):
+        raise RuntimeError(f"Source file not found for dataset {config.name!r}: bucket={store.bucket_name!r} key={key!r}")
+    return key
 
 def _validate_header(config: StagingDataConfig, fieldnames: list[str] | None) -> None:
     if not fieldnames:
@@ -112,49 +105,51 @@ def _truncate_table(cur, table_name: str) -> int:
     cur.execute(f"TRUNCATE TABLE {table_name}")
     return existing_rows
 
-def _preflight_resolve_sources(run_date: date) -> dict[str, tuple[str, str]]:
-    resolved_sources: dict[str, tuple[str, str]] = {}
+def _preflight_resolve_sources(run_date: date, store: ObjectStore) -> dict[str, str]:
+    resolved_keys: dict[str, str] = {}
     source_errors: list[str] = []
 
     for config in STAGING_DATASETS:
         try:
-            resolved_sources[config.name] = _resolve_source_file(config, run_date)
+            resolved_keys[config.name] = _resolve_source_key(config, run_date, store)
         except Exception as exc:
             source_errors.append(f"{config.name}: {exc}")
 
     if source_errors:
-        logger.error("Staging load preflight failed. Not all files are available for run_date=%s", run_date.isoformat())
+        logger.error("Preflight failed: not all files available for run_date=%s", run_date.isoformat())
         for err in source_errors:
             logger.error("Missing/invalid source: %s", err)
-        raise RuntimeError("Preflight source validation failed. Staging load will not start.")
+        raise RuntimeError("Preflight source validation failed.")
 
-    logger.info("Preflight source validation passed: run_date=%s datasets=%s", run_date.isoformat(), len(resolved_sources))
-    return resolved_sources
+    logger.info("Preflight passed: run_date=%s datasets=%s", run_date.isoformat(), len(resolved_keys))
+    return resolved_keys
 
-def load_data_set(config: StagingDataConfig, cur, run_date: date, source_path: str, source_file: str) -> int:
+def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectStore, key: str) -> int:
     try:
         snapshot_dt = run_date
+        source_file = key.split("/")[-1]
         batch_size = _get_batch_size()
         inserted_rows = 0
 
-        logger.info("Starting dataset load: dataset=%s table=%s source_path=%s source_file=%s", config.name, config.table_name, source_path, source_file)
+        logger.info("Starting dataset load: dataset=%s table=%s key=%s source_file=%s", config.name, config.table_name, key, source_file)
 
-        with open(source_path, newline="", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            _validate_header(config, reader.fieldnames)
-            truncated_rows = _truncate_table(cur, config.table_name)
-            logger.info("Truncated table before load: dataset=%s table=%s truncated_rows=%s", config.name, config.table_name, truncated_rows)
-            insert_sql = _build_insert_sql(config)
-            batch: list[tuple[object, ...]] = []
-            for row_num, row in enumerate(reader, start=2):
-                normalized_row = _normalize_row(config=config, row=row, snapshot_dt=snapshot_dt, source_file=source_file, row_num=row_num)
-                batch.append(normalized_row)
-                if len(batch) >= batch_size:
-                    inserted_rows += _flush_batch(cur, insert_sql, batch)
+        stream = store.get_object_stream(key)
+        text_stream = io.TextIOWrapper(stream, encoding="utf-8")
+        reader = csv.DictReader(text_stream)
+        _validate_header(config, reader.fieldnames)
+        truncated_rows = _truncate_table(cur, config.table_name)
+        logger.info("Truncated table before load: dataset=%s table=%s truncated_rows=%s", config.name, config.table_name, truncated_rows)
+        insert_sql = _build_insert_sql(config)
+        batch: list[tuple[object, ...]] = []
+        for row_num, row in enumerate(reader, start=2):
+            normalized_row = _normalize_row(config=config, row=row, snapshot_dt=snapshot_dt, source_file=source_file, row_num=row_num)
+            batch.append(normalized_row)
+            if len(batch) >= batch_size:
+                inserted_rows += _flush_batch(cur, insert_sql, batch)
 
-            inserted_rows += _flush_batch(cur, insert_sql, batch)
-            logger.info("Completed dataset load: dataset=%s table=%s inserted_rows=%s source_file=%s", config.name, config.table_name, inserted_rows, source_file)
-            return inserted_rows
+        inserted_rows += _flush_batch(cur, insert_sql, batch)
+        logger.info("Completed dataset load: dataset=%s table=%s inserted_rows=%s source_file=%s", config.name, config.table_name, inserted_rows, source_file)
+        return inserted_rows
     except Exception:
         logger.exception("Dataset load failed: dataset=%s table=%s", config.name, config.table_name)
         raise
@@ -162,18 +157,19 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, source_path: s
 def main() -> None:
     logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"), format="%(asctime)s %(levelname)s %(message)s")
     run_date = _get_run_date()
+    store = ObjectStore()
     total_inserted_rows = 0
-    logger.info("Starting staging load run: run_date=%s datasets=%s", run_date.isoformat(), len(STAGING_DATASETS))
+    logger.info("Starting staging load: run_date=%s datasets=%s bucket=%s", run_date.isoformat(), len(STAGING_DATASETS), store.bucket_name)
     try:
-        resolved_sources = _preflight_resolve_sources(run_date)
+        resolved_keys = _preflight_resolve_sources(run_date, store)
         with get_connection() as conn:
             with conn.cursor() as cur:
                 for config in STAGING_DATASETS:
-                    source_path, source_file = resolved_sources[config.name]
-                    total_inserted_rows += load_data_set(config, cur, run_date, source_path, source_file)
-        logger.info("Staging load run committed: run_date=%s total_inserted_rows=%s", run_date.isoformat(), total_inserted_rows)
+                    key = resolved_keys[config.name]
+                    total_inserted_rows += load_data_set(config, cur, run_date, store, key)
+        logger.info("Staging load committed: run_date=%s total_rows=%s", run_date.isoformat(), total_inserted_rows)
     except Exception:
-        logger.exception("Staging load run failed and was rolled back: run_date=%s", run_date.isoformat())
+        logger.exception("Staging load failed and rolled back: run_date=%s", run_date.isoformat())
         raise
 
 if __name__ == "__main__":

@@ -5,7 +5,6 @@ from dataclasses import dataclass
 class StagingDataConfig:
     name: str
     table_name: str
-    source_path_env_var: str
     daily_file_name: str
     columns: tuple[str, ...]
     required_columns: tuple[str, ...]
@@ -15,8 +14,7 @@ class StagingDataConfig:
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
     table_name="staging.collisions_basic",
-    source_path_env_var="COLLISIONS_BASIC_FILE",
-    daily_file_name="collisions_basic.csv",
+    daily_file_name="pd_collisions_datasd.csv",
     columns = (
         "report_id",
         "date_time",
@@ -50,8 +48,7 @@ COLLISIONS_STAGING_BASIC = StagingDataConfig(
 COLLISIONS_STAGING_DETAILS = StagingDataConfig(
     name="staging_collisions_details",
     table_name="staging.collisions_details",
-    source_path_env_var="COLLISIONS_DETAILS_FILE",
-    daily_file_name="collisions_details.csv",
+    daily_file_name="pd_collisions_details_datasd.csv",
     columns=(
         "report_id",
         "date_time",
