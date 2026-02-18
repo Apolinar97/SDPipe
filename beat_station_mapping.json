@@ -1,0 +1,2423 @@
+[
+  {
+    "objectid": 13,
+    "source_objectids": [
+      13
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 0,
+    "div": 0,
+    "serv": 0,
+    "name": "SAN DIEGO",
+    "geometry_type": "MultiPolygon",
+    "representative_lat": 32.707137,
+    "representative_lon": -117.179477,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.23
+  },
+  {
+    "objectid": 63,
+    "source_objectids": [
+      63,
+      143,
+      256
+    ],
+    "source_feature_count": 3,
+    "source_null_name_count": 0,
+    "beat": 9,
+    "div": 0,
+    "serv": 0,
+    "name": "SAN DIEGO",
+    "geometry_type": "MultiPolygon",
+    "representative_lat": 32.608328,
+    "representative_lon": -116.928931,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 6.25
+  },
+  {
+    "objectid": 164,
+    "source_objectids": [
+      164
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 111,
+    "div": 1,
+    "serv": 110,
+    "name": "CLAIREMONT MESA EAST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.817705,
+    "representative_lon": -117.170528,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 2.92
+  },
+  {
+    "objectid": 49,
+    "source_objectids": [
+      49
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 112,
+    "div": 1,
+    "serv": 110,
+    "name": "CLAIREMONT MESA WEST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.810479,
+    "representative_lon": -117.187691,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 4.56
+  },
+  {
+    "objectid": 158,
+    "source_objectids": [
+      158
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 113,
+    "div": 1,
+    "serv": 110,
+    "name": "BAY HO",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.82445,
+    "representative_lon": -117.218644,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 7.48
+  },
+  {
+    "objectid": 47,
+    "source_objectids": [
+      47
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 114,
+    "div": 1,
+    "serv": 110,
+    "name": "NORTH CLAIREMONT",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.829658,
+    "representative_lon": -117.204269,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 6.27
+  },
+  {
+    "objectid": 90,
+    "source_objectids": [
+      90
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 115,
+    "div": 1,
+    "serv": 110,
+    "name": "UNIVERSITY CITY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.869663,
+    "representative_lon": -117.211979,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 6.58
+  },
+  {
+    "objectid": 397,
+    "source_objectids": [
+      397
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 116,
+    "div": 1,
+    "serv": 110,
+    "name": "BAY PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.790877,
+    "representative_lon": -117.197702,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 6.12
+  },
+  {
+    "objectid": 37,
+    "source_objectids": [
+      37
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 121,
+    "div": 1,
+    "serv": 120,
+    "name": "MISSION BEACH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.774812,
+    "representative_lon": -117.251782,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 7.12
+  },
+  {
+    "objectid": 226,
+    "source_objectids": [
+      226
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 122,
+    "div": 1,
+    "serv": 120,
+    "name": "PACIFIC BEACH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.801389,
+    "representative_lon": -117.235779,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 8.49
+  },
+  {
+    "objectid": 44,
+    "source_objectids": [
+      44,
+      179,
+      210,
+      446
+    ],
+    "source_feature_count": 4,
+    "source_null_name_count": 0,
+    "beat": 123,
+    "div": 1,
+    "serv": 120,
+    "name": "MISSION BAY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.77783,
+    "representative_lon": -117.22767,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 5.85
+  },
+  {
+    "objectid": 563,
+    "source_objectids": [
+      563
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 124,
+    "div": 1,
+    "serv": 120,
+    "name": "LA JOLLA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.838854,
+    "representative_lon": -117.258369,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 11.4
+  },
+  {
+    "objectid": 591,
+    "source_objectids": [
+      591
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 126,
+    "div": 1,
+    "serv": 120,
+    "name": "TORREY PINES",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.892381,
+    "representative_lon": -117.240328,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 9.61
+  },
+  {
+    "objectid": 141,
+    "source_objectids": [
+      141
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 231,
+    "div": 2,
+    "serv": 230,
+    "name": "SABRE SPRINGS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.950705,
+    "representative_lon": -117.094026,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 10.16
+  },
+  {
+    "objectid": 278,
+    "source_objectids": [
+      278
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 232,
+    "div": 2,
+    "serv": 230,
+    "name": "CARMEL MOUNTAIN",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.98106,
+    "representative_lon": -117.075708,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 13.94
+  },
+  {
+    "objectid": 605,
+    "source_objectids": [
+      605
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 233,
+    "div": 2,
+    "serv": 230,
+    "name": "RANCHO PENASQUITOS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.962181,
+    "representative_lon": -117.122992,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 10.55
+  },
+  {
+    "objectid": 581,
+    "source_objectids": [
+      581
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 234,
+    "div": 2,
+    "serv": 230,
+    "name": "RANCHO BERNARDO",
+    "geometry_type": "Polygon",
+    "representative_lat": 33.03363,
+    "representative_lon": -117.070408,
+    "station_id": "KRNM",
+    "station_name": "Ramona Airport",
+    "station_location": "North Inland/East County",
+    "distance_to_station_km": 14.49
+  },
+  {
+    "objectid": 606,
+    "source_objectids": [
+      606
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 235,
+    "div": 2,
+    "serv": 230,
+    "name": "SAN PASQUAL",
+    "geometry_type": "Polygon",
+    "representative_lat": 33.082709,
+    "representative_lon": -116.995138,
+    "station_id": "KRNM",
+    "station_name": "Ramona Airport",
+    "station_location": "North Inland/East County",
+    "distance_to_station_km": 8.75
+  },
+  {
+    "objectid": 587,
+    "source_objectids": [
+      587
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 241,
+    "div": 2,
+    "serv": 240,
+    "name": "SCRIPPS RANCH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.886345,
+    "representative_lon": -117.056465,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 8.22
+  },
+  {
+    "objectid": 528,
+    "source_objectids": [
+      528
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 242,
+    "div": 2,
+    "serv": 240,
+    "name": "MIRA MESA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.919479,
+    "representative_lon": -117.142617,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 5.67
+  },
+  {
+    "objectid": 597,
+    "source_objectids": [
+      597
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 243,
+    "div": 2,
+    "serv": 240,
+    "name": "MIRAMAR",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.870392,
+    "representative_lon": -117.15309,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 1.09
+  },
+  {
+    "objectid": 142,
+    "source_objectids": [
+      142
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 245,
+    "div": 2,
+    "serv": 240,
+    "name": "RANCHO ENCANTADA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.932043,
+    "representative_lon": -117.00773,
+    "station_id": "KSEE",
+    "station_name": "Gillespie Field",
+    "station_location": "East County/El Cajon",
+    "distance_to_station_km": 12.36
+  },
+  {
+    "objectid": 56,
+    "source_objectids": [
+      56
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 246,
+    "div": 2,
+    "serv": 240,
+    "name": "MIRAMAR RANCH NORTH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.931411,
+    "representative_lon": -117.089761,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 8.52
+  },
+  {
+    "objectid": 53,
+    "source_objectids": [
+      53
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 311,
+    "div": 3,
+    "serv": 310,
+    "name": "SERRA MESA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.792845,
+    "representative_lon": -117.130851,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 2.67
+  },
+  {
+    "objectid": 589,
+    "source_objectids": [
+      589
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 312,
+    "div": 3,
+    "serv": 310,
+    "name": "TIERRASANTA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.834441,
+    "representative_lon": -117.082568,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 5.71
+  },
+  {
+    "objectid": 535,
+    "source_objectids": [
+      535
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 313,
+    "div": 3,
+    "serv": 310,
+    "name": "KEARNY MESA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.830386,
+    "representative_lon": -117.142715,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 1.65
+  },
+  {
+    "objectid": 16,
+    "source_objectids": [
+      16
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 314,
+    "div": 3,
+    "serv": 310,
+    "name": "BIRDLAND",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.794478,
+    "representative_lon": -117.153724,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 2.72
+  },
+  {
+    "objectid": 183,
+    "source_objectids": [
+      183
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 315,
+    "div": 3,
+    "serv": 310,
+    "name": "MISSION VALLEY EAST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.773422,
+    "representative_lon": -117.142133,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 4.71
+  },
+  {
+    "objectid": 115,
+    "source_objectids": [
+      115
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 316,
+    "div": 3,
+    "serv": 310,
+    "name": "QUALCOMM",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.782922,
+    "representative_lon": -117.119246,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 4.11
+  },
+  {
+    "objectid": 432,
+    "source_objectids": [
+      432
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 321,
+    "div": 3,
+    "serv": 320,
+    "name": "GRANTVILLE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.795698,
+    "representative_lon": -117.099792,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 4.33
+  },
+  {
+    "objectid": 378,
+    "source_objectids": [
+      378
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 322,
+    "div": 3,
+    "serv": 320,
+    "name": "ALLIED GARDENS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.796648,
+    "representative_lon": -117.07994,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 5.96
+  },
+  {
+    "objectid": 494,
+    "source_objectids": [
+      494
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 323,
+    "div": 3,
+    "serv": 320,
+    "name": "DEL CERRO",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.787195,
+    "representative_lon": -117.064574,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 7.69
+  },
+  {
+    "objectid": 488,
+    "source_objectids": [
+      488
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 324,
+    "div": 3,
+    "serv": 320,
+    "name": "LAKE MURRAY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.818672,
+    "representative_lon": -117.030474,
+    "station_id": "KSEE",
+    "station_name": "Gillespie Field",
+    "station_location": "East County/El Cajon",
+    "distance_to_station_km": 5.5
+  },
+  {
+    "objectid": 491,
+    "source_objectids": [
+      491
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 325,
+    "div": 3,
+    "serv": 320,
+    "name": "SAN CARLOS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.803113,
+    "representative_lon": -117.050781,
+    "station_id": "KSEE",
+    "station_name": "Gillespie Field",
+    "station_location": "East County/El Cajon",
+    "distance_to_station_km": 7.74
+  },
+  {
+    "objectid": 442,
+    "source_objectids": [
+      442
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 326,
+    "div": 3,
+    "serv": 320,
+    "name": "COLLEGE WEST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.76975,
+    "representative_lon": -117.077583,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 7.72
+  },
+  {
+    "objectid": 493,
+    "source_objectids": [
+      493
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 327,
+    "div": 3,
+    "serv": 320,
+    "name": "COLLEGE EAST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.771874,
+    "representative_lon": -117.05843,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 9.01
+  },
+  {
+    "objectid": 212,
+    "source_objectids": [
+      212
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 431,
+    "div": 4,
+    "serv": 430,
+    "name": "EMERALD HILLS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.718616,
+    "representative_lon": -117.075499,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 11.17
+  },
+  {
+    "objectid": 444,
+    "source_objectids": [
+      444
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 432,
+    "div": 4,
+    "serv": 430,
+    "name": "VALENCIA PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.701027,
+    "representative_lon": -117.077274,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 11.47
+  },
+  {
+    "objectid": 170,
+    "source_objectids": [
+      170
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 433,
+    "div": 4,
+    "serv": 430,
+    "name": "ENCANTO",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.721822,
+    "representative_lon": -117.058673,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 12.69
+  },
+  {
+    "objectid": 372,
+    "source_objectids": [
+      372
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 434,
+    "div": 4,
+    "serv": 430,
+    "name": "JAMACHA LOMITA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.712149,
+    "representative_lon": -117.028376,
+    "station_id": "KSEE",
+    "station_name": "Gillespie Field",
+    "station_location": "East County/El Cajon",
+    "distance_to_station_km": 13.55
+  },
+  {
+    "objectid": 388,
+    "source_objectids": [
+      388
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 435,
+    "div": 4,
+    "serv": 430,
+    "name": "BROADWAY HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.731642,
+    "representative_lon": -117.052032,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 12.41
+  },
+  {
+    "objectid": 132,
+    "source_objectids": [
+      132,
+      425
+    ],
+    "source_feature_count": 2,
+    "source_null_name_count": 0,
+    "beat": 436,
+    "div": 4,
+    "serv": 430,
+    "name": "SKYLINE",
+    "geometry_type": "MultiPolygon",
+    "representative_lat": 32.706843,
+    "representative_lon": -117.043518,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 14.36
+  },
+  {
+    "objectid": 304,
+    "source_objectids": [
+      304
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 437,
+    "div": 4,
+    "serv": 430,
+    "name": "BAY TERRACES",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.687081,
+    "representative_lon": -117.036021,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 13.77
+  },
+  {
+    "objectid": 448,
+    "source_objectids": [
+      448
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 438,
+    "div": 4,
+    "serv": 430,
+    "name": "PARADISE HILLS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.675753,
+    "representative_lon": -117.059494,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 13.68
+  },
+  {
+    "objectid": 64,
+    "source_objectids": [
+      64
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 439,
+    "div": 4,
+    "serv": 430,
+    "name": "ALTA VISTA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.693451,
+    "representative_lon": -117.066981,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 12.66
+  },
+  {
+    "objectid": 383,
+    "source_objectids": [
+      383
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 441,
+    "div": 4,
+    "serv": 440,
+    "name": "MOUNTAIN VIEW",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.698898,
+    "representative_lon": -117.107698,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 8.91
+  },
+  {
+    "objectid": 445,
+    "source_objectids": [
+      445
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 442,
+    "div": 4,
+    "serv": 440,
+    "name": "SOUTHCREST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.691731,
+    "representative_lon": -117.11122,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 9.0
+  },
+  {
+    "objectid": 70,
+    "source_objectids": [
+      70
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 443,
+    "div": 4,
+    "serv": 440,
+    "name": "SHELLTOWN",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.686048,
+    "representative_lon": -117.107221,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 9.65
+  },
+  {
+    "objectid": 45,
+    "source_objectids": [
+      45
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 444,
+    "div": 4,
+    "serv": 440,
+    "name": "MT HOPE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.712595,
+    "representative_lon": -117.109927,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 8.16
+  },
+  {
+    "objectid": 186,
+    "source_objectids": [
+      186
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 445,
+    "div": 4,
+    "serv": 440,
+    "name": "CHOLLAS VIEW",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.713235,
+    "representative_lon": -117.093432,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 9.64
+  },
+  {
+    "objectid": 213,
+    "source_objectids": [
+      213
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 446,
+    "div": 4,
+    "serv": 440,
+    "name": "LINCOLN PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.699138,
+    "representative_lon": -117.08992,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 10.43
+  },
+  {
+    "objectid": 342,
+    "source_objectids": [
+      342
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 447,
+    "div": 4,
+    "serv": 440,
+    "name": "RIDGEVIEW/WEBSTER",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.72738,
+    "representative_lon": -117.094079,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 9.33
+  },
+  {
+    "objectid": 451,
+    "source_objectids": [
+      451
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 451,
+    "div": 4,
+    "serv": 430,
+    "name": "OAK PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.731779,
+    "representative_lon": -117.074981,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 11.09
+  },
+  {
+    "objectid": 74,
+    "source_objectids": [
+      74
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 452,
+    "div": 4,
+    "serv": 430,
+    "name": "O'FARRELL",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.702318,
+    "representative_lon": -117.062102,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 12.79
+  },
+  {
+    "objectid": 14,
+    "source_objectids": [
+      14,
+      526
+    ],
+    "source_feature_count": 2,
+    "source_null_name_count": 1,
+    "beat": 511,
+    "div": 5,
+    "serv": 510,
+    "name": "BARRIO LOGAN",
+    "geometry_type": "MultiPolygon",
+    "representative_lat": 32.692353,
+    "representative_lon": -117.132847,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 7.3
+  },
+  {
+    "objectid": 199,
+    "source_objectids": [
+      199
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 512,
+    "div": 5,
+    "serv": 510,
+    "name": "LOGAN HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.699801,
+    "representative_lon": -117.130528,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 6.99
+  },
+  {
+    "objectid": 362,
+    "source_objectids": [
+      362
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 514,
+    "div": 5,
+    "serv": 510,
+    "name": "SHERMAN HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.70975,
+    "representative_lon": -117.143875,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 5.35
+  },
+  {
+    "objectid": 331,
+    "source_objectids": [
+      331
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 515,
+    "div": 5,
+    "serv": 510,
+    "name": "GRANT HILL",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.710271,
+    "representative_lon": -117.135226,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 6.04
+  },
+  {
+    "objectid": 319,
+    "source_objectids": [
+      319
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 516,
+    "div": 5,
+    "serv": 510,
+    "name": "STOCKTON",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.71178,
+    "representative_lon": -117.124473,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 6.9
+  },
+  {
+    "objectid": 86,
+    "source_objectids": [
+      86
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 517,
+    "div": 5,
+    "serv": 510,
+    "name": "GOLDEN HILL",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.716322,
+    "representative_lon": -117.134338,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 5.86
+  },
+  {
+    "objectid": 189,
+    "source_objectids": [
+      189
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 518,
+    "div": 5,
+    "serv": 510,
+    "name": "SOUTH PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.723164,
+    "representative_lon": -117.127412,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 6.29
+  },
+  {
+    "objectid": 426,
+    "source_objectids": [
+      426
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 521,
+    "div": 5,
+    "serv": 520,
+    "name": "EAST VILLAGE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.712129,
+    "representative_lon": -117.152007,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 4.56
+  },
+  {
+    "objectid": 554,
+    "source_objectids": [
+      554
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 522,
+    "div": 5,
+    "serv": 520,
+    "name": "MARINA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.711307,
+    "representative_lon": -117.166978,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.51
+  },
+  {
+    "objectid": 80,
+    "source_objectids": [
+      80
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 523,
+    "div": 5,
+    "serv": 520,
+    "name": "GASLAMP",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.710963,
+    "representative_lon": -117.160122,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 4.01
+  },
+  {
+    "objectid": 400,
+    "source_objectids": [
+      400,
+      638
+    ],
+    "source_feature_count": 2,
+    "source_null_name_count": 0,
+    "beat": 524,
+    "div": 5,
+    "serv": 520,
+    "name": "CORE-COLUMBIA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.715708,
+    "representative_lon": -117.158663,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.82
+  },
+  {
+    "objectid": 177,
+    "source_objectids": [
+      177
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 525,
+    "div": 5,
+    "serv": 520,
+    "name": "HORTON PLAZA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.714112,
+    "representative_lon": -117.163782,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.52
+  },
+  {
+    "objectid": 68,
+    "source_objectids": [
+      68
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 526,
+    "div": 5,
+    "serv": 520,
+    "name": "CORTEZ",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.721528,
+    "representative_lon": -117.15667,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.69
+  },
+  {
+    "objectid": 550,
+    "source_objectids": [
+      550
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 527,
+    "div": 5,
+    "serv": 520,
+    "name": "HARBORVIEW",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.724945,
+    "representative_lon": -117.17173,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 2.25
+  },
+  {
+    "objectid": 457,
+    "source_objectids": [
+      457
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 528,
+    "div": 5,
+    "serv": 520,
+    "name": "LITTLE ITALY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.725305,
+    "representative_lon": -117.167872,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 2.56
+  },
+  {
+    "objectid": 50,
+    "source_objectids": [
+      50
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 529,
+    "div": 5,
+    "serv": 520,
+    "name": "PARK WEST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.731601,
+    "representative_lon": -117.164593,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 2.7
+  },
+  {
+    "objectid": 94,
+    "source_objectids": [
+      94
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 531,
+    "div": 5,
+    "serv": 530,
+    "name": "BALBOA PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.730045,
+    "representative_lon": -117.146633,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 4.39
+  },
+  {
+    "objectid": 439,
+    "source_objectids": [
+      439
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 541,
+    "div": 5,
+    "serv": 520,
+    "name": "PETCO PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.707312,
+    "representative_lon": -117.155533,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 4.6
+  },
+  {
+    "objectid": 524,
+    "source_objectids": [
+      524
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 611,
+    "div": 6,
+    "serv": 610,
+    "name": "MIDWAY DISTRICT",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.740871,
+    "representative_lon": -117.200291,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 1.02
+  },
+  {
+    "objectid": 18,
+    "source_objectids": [
+      18
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 612,
+    "div": 6,
+    "serv": 610,
+    "name": "LOMA PORTAL",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.742035,
+    "representative_lon": -117.218981,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 2.57
+  },
+  {
+    "objectid": 229,
+    "source_objectids": [
+      229
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 613,
+    "div": 6,
+    "serv": 610,
+    "name": "POINT LOMA HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.743586,
+    "representative_lon": -117.233933,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.96
+  },
+  {
+    "objectid": 67,
+    "source_objectids": [
+      67
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 614,
+    "div": 6,
+    "serv": 610,
+    "name": "OCEAN BEACH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.746202,
+    "representative_lon": -117.248084,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 5.32
+  },
+  {
+    "objectid": 449,
+    "source_objectids": [
+      449
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 615,
+    "div": 6,
+    "serv": 610,
+    "name": "ROSEVILLE / FLEET RIDGE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.728738,
+    "representative_lon": -117.234759,
+    "station_id": "KNZY",
+    "station_name": "North Island Naval Air Station",
+    "station_location": "Harbor/Coronado",
+    "distance_to_station_km": 3.75
+  },
+  {
+    "objectid": 181,
+    "source_objectids": [
+      181
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 616,
+    "div": 6,
+    "serv": 610,
+    "name": "LA PLAYA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.715475,
+    "representative_lon": -117.238924,
+    "station_id": "KNZY",
+    "station_name": "North Island Naval Air Station",
+    "station_location": "Harbor/Coronado",
+    "distance_to_station_km": 2.86
+  },
+  {
+    "objectid": 346,
+    "source_objectids": [
+      346
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 617,
+    "div": 6,
+    "serv": 610,
+    "name": "WOODED AREA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.694654,
+    "representative_lon": -117.246619,
+    "station_id": "KNZY",
+    "station_name": "North Island Naval Air Station",
+    "station_location": "Harbor/Coronado",
+    "distance_to_station_km": 2.98
+  },
+  {
+    "objectid": 168,
+    "source_objectids": [
+      168
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 618,
+    "div": 6,
+    "serv": 610,
+    "name": "SUNSET CLIFFS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.727367,
+    "representative_lon": -117.250042,
+    "station_id": "KNZY",
+    "station_name": "North Island Naval Air Station",
+    "station_location": "Harbor/Coronado",
+    "distance_to_station_km": 4.51
+  },
+  {
+    "objectid": 51,
+    "source_objectids": [
+      51
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 621,
+    "div": 6,
+    "serv": 620,
+    "name": "LINDA VISTA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.784744,
+    "representative_lon": -117.173504,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 4.7
+  },
+  {
+    "objectid": 389,
+    "source_objectids": [
+      389
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 622,
+    "div": 6,
+    "serv": 620,
+    "name": "MORENA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.770533,
+    "representative_lon": -117.193038,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 4.07
+  },
+  {
+    "objectid": 361,
+    "source_objectids": [
+      361
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 623,
+    "div": 6,
+    "serv": 620,
+    "name": "MISSION VALLEY WEST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.764147,
+    "representative_lon": -117.177951,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.66
+  },
+  {
+    "objectid": 40,
+    "source_objectids": [
+      40
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 624,
+    "div": 6,
+    "serv": 620,
+    "name": "UNIVERSITY HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.758009,
+    "representative_lon": -117.149716,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 4.89
+  },
+  {
+    "objectid": 19,
+    "source_objectids": [
+      19
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 625,
+    "div": 6,
+    "serv": 620,
+    "name": "OLD TOWN",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.75402,
+    "representative_lon": -117.196295,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 2.26
+  },
+  {
+    "objectid": 209,
+    "source_objectids": [
+      209
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 626,
+    "div": 6,
+    "serv": 620,
+    "name": "MISSION HILLS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.749817,
+    "representative_lon": -117.180744,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 2.13
+  },
+  {
+    "objectid": 360,
+    "source_objectids": [
+      360
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 627,
+    "div": 6,
+    "serv": 620,
+    "name": "HILLCREST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.750458,
+    "representative_lon": -117.163353,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 3.36
+  },
+  {
+    "objectid": 36,
+    "source_objectids": [
+      36
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 628,
+    "div": 6,
+    "serv": 620,
+    "name": "MIDTOWN",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.739694,
+    "representative_lon": -117.175973,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 1.75
+  },
+  {
+    "objectid": 507,
+    "source_objectids": [
+      507
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 711,
+    "div": 7,
+    "serv": 710,
+    "name": "TIJUANA RIVER VALLEY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.548115,
+    "representative_lon": -117.086828,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 10.38
+  },
+  {
+    "objectid": 359,
+    "source_objectids": [
+      359
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 712,
+    "div": 7,
+    "serv": 710,
+    "name": "SAN YSIDRO",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.555674,
+    "representative_lon": -117.048012,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 6.64
+  },
+  {
+    "objectid": 468,
+    "source_objectids": [
+      468
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 713,
+    "div": 7,
+    "serv": 710,
+    "name": "OTAY MESA",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.564554,
+    "representative_lon": -116.987888,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 1.13
+  },
+  {
+    "objectid": 20,
+    "source_objectids": [
+      20
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 714,
+    "div": 7,
+    "serv": 710,
+    "name": "BORDER",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.544516,
+    "representative_lon": -117.030395,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 5.64
+  },
+  {
+    "objectid": 518,
+    "source_objectids": [
+      518
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 721,
+    "div": 7,
+    "serv": 720,
+    "name": "EGGER HIGHLANDS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.582582,
+    "representative_lon": -117.098258,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 11.15
+  },
+  {
+    "objectid": 15,
+    "source_objectids": [
+      15
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 722,
+    "div": 7,
+    "serv": 720,
+    "name": "NESTOR",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.570396,
+    "representative_lon": -117.085163,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 9.87
+  },
+  {
+    "objectid": 128,
+    "source_objectids": [
+      128
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 723,
+    "div": 7,
+    "serv": 720,
+    "name": "OTAY MESA WEST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.578403,
+    "representative_lon": -117.056757,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 7.23
+  },
+  {
+    "objectid": 326,
+    "source_objectids": [
+      326
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 724,
+    "div": 7,
+    "serv": 720,
+    "name": "PALM CITY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.585699,
+    "representative_lon": -117.079303,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 9.43
+  },
+  {
+    "objectid": 469,
+    "source_objectids": [
+      469
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 725,
+    "div": 7,
+    "serv": 720,
+    "name": "OCEAN CREST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.579467,
+    "representative_lon": -117.018968,
+    "station_id": "KSDM",
+    "station_name": "Brown Field Municipal",
+    "station_location": "South San Diego",
+    "distance_to_station_km": 3.74
+  },
+  {
+    "objectid": 271,
+    "source_objectids": [
+      271
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 811,
+    "div": 8,
+    "serv": 810,
+    "name": "NORMAL HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.75928,
+    "representative_lon": -117.117798,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 6.59
+  },
+  {
+    "objectid": 380,
+    "source_objectids": [
+      380
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 812,
+    "div": 8,
+    "serv": 810,
+    "name": "BURLINGAME",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.73266,
+    "representative_lon": -117.127263,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 6.19
+  },
+  {
+    "objectid": 321,
+    "source_objectids": [
+      321
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 813,
+    "div": 8,
+    "serv": 810,
+    "name": "NORTH PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.745177,
+    "representative_lon": -117.133502,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 5.74
+  },
+  {
+    "objectid": 357,
+    "source_objectids": [
+      357
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 814,
+    "div": 8,
+    "serv": 810,
+    "name": "ADAMS NORTH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.769946,
+    "representative_lon": -117.120379,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 5.39
+  },
+  {
+    "objectid": 490,
+    "source_objectids": [
+      490
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 821,
+    "div": 8,
+    "serv": 820,
+    "name": "ROLANDO",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.76166,
+    "representative_lon": -117.060201,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 9.54
+  },
+  {
+    "objectid": 450,
+    "source_objectids": [
+      450
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 822,
+    "div": 8,
+    "serv": 820,
+    "name": "EL CERRITO",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.753223,
+    "representative_lon": -117.072045,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 9.38
+  },
+  {
+    "objectid": 452,
+    "source_objectids": [
+      452
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 823,
+    "div": 8,
+    "serv": 820,
+    "name": "REDWOOD VILLAGE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.747687,
+    "representative_lon": -117.068233,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 10.08
+  },
+  {
+    "objectid": 46,
+    "source_objectids": [
+      46
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 824,
+    "div": 8,
+    "serv": 820,
+    "name": "TALMADGE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.763683,
+    "representative_lon": -117.090209,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 7.39
+  },
+  {
+    "objectid": 55,
+    "source_objectids": [
+      55
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 825,
+    "div": 8,
+    "serv": 820,
+    "name": "KENSINGTON",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.766142,
+    "representative_lon": -117.103491,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 6.45
+  },
+  {
+    "objectid": 211,
+    "source_objectids": [
+      211
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 826,
+    "div": 8,
+    "serv": 820,
+    "name": "COLINA DEL SOL",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.753377,
+    "representative_lon": -117.08583,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 8.55
+  },
+  {
+    "objectid": 167,
+    "source_objectids": [
+      167
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 827,
+    "div": 8,
+    "serv": 820,
+    "name": "CHOLLAS CREEK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.742553,
+    "representative_lon": -117.085107,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 9.58
+  },
+  {
+    "objectid": 73,
+    "source_objectids": [
+      73
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 828,
+    "div": 8,
+    "serv": 820,
+    "name": "FOX CANYON",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.745331,
+    "representative_lon": -117.089601,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 9.1
+  },
+  {
+    "objectid": 185,
+    "source_objectids": [
+      185
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 829,
+    "div": 8,
+    "serv": 820,
+    "name": "ISLENAIR",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.740563,
+    "representative_lon": -117.0911,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 9.49
+  },
+  {
+    "objectid": 286,
+    "source_objectids": [
+      286
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 831,
+    "div": 8,
+    "serv": 830,
+    "name": "TERALTA EAST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.75256,
+    "representative_lon": -117.09654,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 8.08
+  },
+  {
+    "objectid": 23,
+    "source_objectids": [
+      23
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 832,
+    "div": 8,
+    "serv": 830,
+    "name": "TERALTA WEST",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.752778,
+    "representative_lon": -117.105098,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 7.69
+  },
+  {
+    "objectid": 434,
+    "source_objectids": [
+      434
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 833,
+    "div": 8,
+    "serv": 830,
+    "name": "FAIRMOUNT VILLAGE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.745217,
+    "representative_lon": -117.096631,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 8.79
+  },
+  {
+    "objectid": 453,
+    "source_objectids": [
+      453
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 834,
+    "div": 8,
+    "serv": 830,
+    "name": "CASTLE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.740917,
+    "representative_lon": -117.107162,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 8.11
+  },
+  {
+    "objectid": 422,
+    "source_objectids": [
+      422
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 835,
+    "div": 8,
+    "serv": 830,
+    "name": "AZALEA/HOLLYWOOD PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.732997,
+    "representative_lon": -117.106197,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 8.16
+  },
+  {
+    "objectid": 382,
+    "source_objectids": [
+      382
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 836,
+    "div": 8,
+    "serv": 830,
+    "name": "SWAN CANYON",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.734578,
+    "representative_lon": -117.097316,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 9.0
+  },
+  {
+    "objectid": 314,
+    "source_objectids": [
+      314
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 837,
+    "div": 8,
+    "serv": 830,
+    "name": "FAIRMOUNT PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.724376,
+    "representative_lon": -117.108626,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 8.01
+  },
+  {
+    "objectid": 48,
+    "source_objectids": [
+      48
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 838,
+    "div": 8,
+    "serv": 830,
+    "name": "CORRIDOR",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.752062,
+    "representative_lon": -117.116592,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 7.38
+  },
+  {
+    "objectid": 17,
+    "source_objectids": [
+      17
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 839,
+    "div": 8,
+    "serv": 830,
+    "name": "CHEROKEE POINT",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.743506,
+    "representative_lon": -117.114623,
+    "station_id": "KSAN",
+    "station_name": "San Diego International Airport",
+    "station_location": "Coastal/Downtown",
+    "distance_to_station_km": 7.45
+  },
+  {
+    "objectid": 423,
+    "source_objectids": [
+      423
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 841,
+    "div": 8,
+    "serv": 820,
+    "name": "ROLANDO PARK",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.748904,
+    "representative_lon": -117.05575,
+    "station_id": "KMYF",
+    "station_name": "Montgomery-Gibbs Executive",
+    "station_location": "Kearny Mesa/Inland",
+    "distance_to_station_km": 10.79
+  },
+  {
+    "objectid": 71,
+    "source_objectids": [
+      71
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 931,
+    "div": 9,
+    "serv": 930,
+    "name": "SORRENTO VALLEY",
+    "geometry_type": "MultiPolygon",
+    "representative_lat": 32.894821,
+    "representative_lon": -117.193628,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 5.68
+  },
+  {
+    "objectid": 416,
+    "source_objectids": [
+      416
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 932,
+    "div": 9,
+    "serv": 930,
+    "name": "TORREY PRESERVE",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.920275,
+    "representative_lon": -117.248085,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 11.5
+  },
+  {
+    "objectid": 529,
+    "source_objectids": [
+      529
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 933,
+    "div": 9,
+    "serv": 930,
+    "name": "DEL MAR HEIGHTS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.955217,
+    "representative_lon": -117.250202,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 14.0
+  },
+  {
+    "objectid": 537,
+    "source_objectids": [
+      537
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 934,
+    "div": 9,
+    "serv": 930,
+    "name": "CARMEL VALLEY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.937283,
+    "representative_lon": -117.205305,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 9.69
+  },
+  {
+    "objectid": 9,
+    "source_objectids": [
+      9
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 935,
+    "div": 9,
+    "serv": 930,
+    "name": "NORTH CITY",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.972658,
+    "representative_lon": -117.214363,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 13.42
+  },
+  {
+    "objectid": 604,
+    "source_objectids": [
+      604
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 936,
+    "div": 9,
+    "serv": 930,
+    "name": "TORREY HIGHLANDS",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.963308,
+    "representative_lon": -117.158731,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 10.65
+  },
+  {
+    "objectid": 603,
+    "source_objectids": [
+      603
+    ],
+    "source_feature_count": 1,
+    "source_null_name_count": 0,
+    "beat": 937,
+    "div": 9,
+    "serv": 930,
+    "name": "BLACK MOUNTAIN RANCH",
+    "geometry_type": "Polygon",
+    "representative_lat": 32.999782,
+    "representative_lon": -117.145503,
+    "station_id": "KNKX",
+    "station_name": "MCAS Miramar",
+    "station_location": "North Inland/Miramar",
+    "distance_to_station_km": 14.58
+  }
+]
