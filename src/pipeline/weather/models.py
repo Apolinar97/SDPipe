@@ -57,9 +57,9 @@ class NwsStationObservation(BaseModel):
 
 class BeatStationMapping(BaseModel):
     model_config = ConfigDict(extra='ignore', populate_by_name=True)
-    object_id: int = Field(..., alias="ObjectId")
+    object_id: int = Field(..., alias="objectid")
     beat: int = Field(..., description='Beat ID for police beat')
     name: str = Field(..., description='Name of Police Beat')
     representative_lat: float = Field(..., description="Best latitude to represent beat")
     representative_lon: float = Field(..., description="Best longitute to represent beat")
-    station_id: str = Field(...,"Station Id, used to query NWS API")
+    station_id: str = Field(..., description="Station Id, used to query NWS API")
