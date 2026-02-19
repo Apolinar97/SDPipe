@@ -5,6 +5,9 @@ from pathlib import Path
 from dataclasses import dataclass
 import os
 from pipeline.storage.object_store import ObjectStore
+from pipeline.config.object_store_config import ObjectStoreConfig
+from pipeline.weather.models import NwsStationObservation
+
 TEMP_DIR_ROOT = os.getenv('TEMP_DIR_ROOT', '/tmp')  # Default to /tmp if not set
 API_URL = 'https://api.weather.gov'
 object_store = None
@@ -15,23 +18,12 @@ def require_env(var_name):
         raise ValueError(f"Environment variable '{var_name}' is required but not set.")
     return value
 
-@dataclass(frozen=True)
-class ObjectStoreConfig:
-    endpoint: str
-    access_key: str
-    secret_key: str
-    bucket_name: str
-
-def get_object_store_config():
+def get_object_store_config() -> ObjectStoreConfig:
     s3_end_point = require_env('AWS_S3_ENDPOINT')
     s3_access_key = require_env('AWS_S3_ACCESS_KEY')
     s3_secret_key = require_env('AWS_S3_SECRET_KEY')
     s3_weather_bucket_name = require_env('AWS_S3_WEATHER_BUCKET_NAME')
-    return ObjectStoreConfig(endpoint=s3_end_point, access_key=s3_access_key, secret_key=s3_secret_key, bucket_name=s3_weather_bucket_name)
-
-@dataclass(frozen=True)
-class CaptureConfig:
-    pass
+    return ObjectStoreConfig(s3_end_point, s3_access_key, s3_secret_key, s3_weather_bucket_name)
 
 def load_base_stations_mapping_file(object_store: ObjectStore, mapping_file_key: str) -> Path:
     local_path = Path(TEMP_DIR_ROOT) / mapping_file_key
@@ -42,7 +34,7 @@ def lambda_handler(event, context):
     global object_store
     if object_store is None:
         object_store_config = get_object_store_config()
-        object_store = ObjectStore(object_store_config.endpoint, object_store_config.access_key, object_store_config.secret_key, object_store_config.bucket_name)
+        object_store = ObjectStore(object_store_config)
     mapping_file_key = require_env('MAPPING_FILE_KEY')
     mapping_file_path =load_base_stations_mapping_file(object_store, mapping_file_key)
     if not mapping_file_path.exists():
