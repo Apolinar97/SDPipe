@@ -1,19 +1,14 @@
 import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
+from pipeline.config.object_store_config import ObjectStoreConfig
 
-def is_valid_object_store_config(endpoint:str, access_key:str, secret_key:str, bucket_name:str) -> bool:
-    if not endpoint.strip() or not access_key.strip() or not secret_key.strip() or not bucket_name.strip():
-        return False
-    return True
 class ObjectStore:
-    def __init__(self, endpoint: str | None = None, access_key: str | None = None, secret_key: str | None = None, bucket_name: str | None = None):
-        if not is_valid_object_store_config(endpoint, access_key, secret_key, bucket_name):
-            raise ValueError("Invalid ObjectStore configuration. All parameters must be provided.")        
-        self.endpoint = endpoint
-        self.access_key = access_key
-        self.secret_key = secret_key
-        self.bucket_name = bucket_name
+    def __init__(self, config: ObjectStoreConfig):      
+        self.endpoint = config.endpoint
+        self.access_key = config.access_key
+        self.secret_key = config.secret_key
+        self.bucket_name = config.bucket_name
         client_kwargs = {"config": Config(signature_version="s3v4"), "region_name": "us-east-1"}
         if self.endpoint:
             client_kwargs["endpoint_url"] = self.endpoint
