@@ -4,17 +4,17 @@ from __future__ import annotations
 
 import argparse
 import json
-import logging
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+from pipeline.logging_config import configure_logging as configure_pipeline_logging, get_logger
 from geopy.distance import geodesic
 from shapely.geometry import Point, shape
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_GEOJSON_PATH = PROJECT_ROOT / "pd_beats_datasd.geojson"
@@ -108,9 +108,9 @@ def parse_args() -> argparse.Namespace:
 
 
 def configure_logging(level: str) -> None:
-    logging.basicConfig(
+    configure_pipeline_logging(
         level=level,
-        format="%(asctime)s %(levelname)s %(message)s",
+        service="scripts.geo.police_beats_parser",
     )
 
 

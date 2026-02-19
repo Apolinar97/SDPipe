@@ -2,6 +2,10 @@ import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
 from pipeline.config.object_store_config import ObjectStoreConfig
+from pipeline.logging_config import get_logger
+
+
+logger = get_logger(__name__)
 
 class ObjectStore:
     def __init__(self, config: ObjectStoreConfig):      
@@ -27,7 +31,7 @@ class ObjectStore:
             contents = response.get("Contents", [])
             return [obj["Key"] for obj in contents]
         except Exception as e:
-            print(f"Error listing objects with prefix '{prefix}': {e}")
+            logger.exception("Failed to list objects: prefix=%s bucket=%s", prefix, self._bucket(bucket_name))
             return []
     
     def download_object(self, key: str, destination: str, bucket_name: str | None = None):

@@ -1,13 +1,13 @@
 import os
 import io
 import csv
-import logging
 from datetime import date
 from pipeline.staging.data_config import STAGING_DATASETS, StagingDataConfig
 from pipeline.db import get_connection
+from pipeline.logging_config import configure_logging, get_logger
 from pipeline.storage.object_store import ObjectStore
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 def _get_batch_size() -> int:
     raw = os.getenv("STAGING_BATCH_SIZE", "2000")
@@ -155,7 +155,7 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectS
         raise
 
 def main() -> None:
-    logging.basicConfig(level=os.getenv("LOG_LEVEL", "INFO"), format="%(asctime)s %(levelname)s %(message)s")
+    configure_logging(level=os.getenv("LOG_LEVEL", "INFO"), service="pipeline.staging")
     run_date = _get_run_date()
     store = ObjectStore()
     total_inserted_rows = 0
