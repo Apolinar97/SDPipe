@@ -1,14 +1,19 @@
-import os
 import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
+def is_valid_object_store_config(endpoint:str, access_key:str, secret_key:str, bucket_name:str) -> bool:
+    if not endpoint.strip() or not access_key.strip() or not secret_key.strip() or not bucket_name.strip():
+        return False
+    return True
 class ObjectStore:
-    def __init__(self):
-        self.endpoint = os.getenv("OBJECT_STORE_ENDPOINT")
-        self.access_key = os.getenv("OBJECT_STORE_ACCESS_KEY")
-        self.secret_key = os.getenv("OBJECT_STORE_SECRET_KEY")
-        self.bucket_name = os.getenv("OBJECT_STORE_BUCKET_NAME", "sdpipe")
+    def __init__(self, endpoint: str | None = None, access_key: str | None = None, secret_key: str | None = None, bucket_name: str | None = None):
+        if not is_valid_object_store_config(endpoint, access_key, secret_key, bucket_name):
+            raise ValueError("Invalid ObjectStore configuration. All parameters must be provided.")        
+        self.endpoint = endpoint
+        self.access_key = access_key
+        self.secret_key = secret_key
+        self.bucket_name = bucket_name
         client_kwargs = {"config": Config(signature_version="s3v4"), "region_name": "us-east-1"}
         if self.endpoint:
             client_kwargs["endpoint_url"] = self.endpoint
@@ -18,33 +23,33 @@ class ObjectStore:
             client_kwargs["aws_secret_access_key"] = self.secret_key
         self.client = boto3.client("s3", **client_kwargs)
 
-    def list_objects(self, prefix: str = ""):
+    def _bucket(self, bucket_name: str | None = None) -> str:
+        return bucket_name or self.bucket_name
+
+    def list_objects(self, prefix: str = "", bucket_name: str | None = None):
         try:
-            response = self.client.list_objects_v2(Bucket=self.bucket_name, Prefix=prefix)
+            response = self.client.list_objects_v2(Bucket=self._bucket(bucket_name), Prefix=prefix)
             contents = response.get("Contents", [])
             return [obj["Key"] for obj in contents]
         except Exception as e:
             print(f"Error listing objects with prefix '{prefix}': {e}")
             return []
     
-    def download_object(self, key: str, destination: str):
+    def download_object(self, key: str, destination: str, bucket_name: str | None = None):
         try:
-            self.client.download_file(self.bucket_name, key, destination)
-            print(f"Downloaded object '{key}' to '{destination}'")
+            self.client.download_file(self._bucket(bucket_name), key, destination)
         except Exception as e:
-            print(f"Error downloading object '{key}': {e}")
+            raise RuntimeError(f"Error downloading object '{key}' to '{destination}': {e}") from e
 
-    def upload_file(self, source: str, key: str):
+    def upload_file(self, source: str, key: str, bucket_name: str | None = None):
         try:
-            self.client.upload_file(source, self.bucket_name, key)
-            print(f"Uploaded '{source}' to '{key}'")
+            self.client.upload_file(source, self._bucket(bucket_name), key)
         except Exception as e:
-            print(f"Error uploading '{source}' to '{key}': {e}")
-            raise
-
-    def object_exists(self, key: str) -> bool:
+            raise RuntimeError(f"Error uploading file '{source}' to '{key}': {e}") from e
+        
+    def object_exists(self, key: str, bucket_name: str | None = None) -> bool:
         try:
-            self.client.head_object(Bucket=self.bucket_name, Key=key)
+            self.client.head_object(Bucket=self._bucket(bucket_name), Key=key)
             return True
         except ClientError as e:
             code = e.response.get("Error", {}).get("Code")
@@ -52,17 +57,18 @@ class ObjectStore:
                 return False
             raise
 
-    def get_object_stream(self, key: str):
+    def get_object_stream(self, key: str, bucket_name: str | None = None):
         """
         Stream an object from S3/MinIO without downloading to disk.
         Returns a streaming body that can be wrapped with io.TextIOWrapper.
         Raises RuntimeError if the object does not exist or cannot be read.
         """
         try:
-            response = self.client.get_object(Bucket=self.bucket_name, Key=key)
+            bucket = self._bucket(bucket_name)
+            response = self.client.get_object(Bucket=bucket, Key=key)
             return response["Body"]
         except ClientError as e:
             code = e.response.get("Error", {}).get("Code")
             if code in {"404", "NoSuchKey", "NotFound"}:
-                raise RuntimeError(f"Object not found in bucket {self.bucket_name!r}: {key!r}") from e
+                raise RuntimeError(f"Object not found in bucket {bucket!r}: {key!r}") from e
             raise
