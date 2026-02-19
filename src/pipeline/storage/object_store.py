@@ -45,7 +45,19 @@ class ObjectStore:
             self.client.upload_file(source, self._bucket(bucket_name), key)
         except Exception as e:
             raise RuntimeError(f"Error uploading file '{source}' to '{key}': {e}") from e
-        
+    
+    def put_object(self, key:str, data:bytes, content_type:str = "application/json", bucket_name:str| None=None):
+        try:
+            self.client.put_object(
+                Bucket = self._bucket(bucket_name),
+                Key = key,
+                Body = data,
+                ContentType = content_type
+            )
+        except Exception as e:
+            raise RuntimeError(f'Error putting object {key} to bucket {bucket_name} ') from e
+    
+
     def object_exists(self, key: str, bucket_name: str | None = None) -> bool:
         try:
             self.client.head_object(Bucket=self._bucket(bucket_name), Key=key)

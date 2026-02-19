@@ -3,16 +3,21 @@ import json
 from pathlib import Path
 import os
 import time
+from datetime import datetime, timezone
 import requests
-from pydantic import ValidationError
+from typing import Any
 from pipeline.storage.object_store import ObjectStore
 from pipeline.config.object_store_config import ObjectStoreConfig
 from pipeline.logging_config import configure_logging, get_logger
-from pipeline.weather.models import BeatStationMapping, NwsStationObservation
-from pipeline.weather.nws_api_fetcher import fetch_latest_observation
+from pipeline.weather.models import BeatStationMapping
+from pipeline.weather.nws_api_fetcher import create_nws_session,fetch_latest_observation_json
 
 TEMP_DIR_ROOT = os.getenv('TEMP_DIR_ROOT', '/tmp')  # Default to /tmp if not set
-object_store = None
+TEMP_OBSERVATION_FILE_PREFIX = os.getenv('TEMP_OBSERVATION_FILE_PREFIX','nws_observations')
+DATA_SOURCE = 'https://api.weather.gov'
+SCHEMA_VERSION = 1
+
+object_store: ObjectStore = None
 logger = get_logger(__name__)
 
 def require_env(var_name):
@@ -44,31 +49,48 @@ def build_beat_station_mapping(mapping_file_path:Path)-> list[BeatStationMapping
 def get_unique_station_ids(list_of_bts: list[BeatStationMapping])-> set[str]:
     return {bts.station_id for bts in list_of_bts if bts.station_id}
 
-def collect_station_observations(unique_station_set:set[str]) -> list[NwsStationObservation]:
-    nws_observations : list[NwsStationObservation] = []
-    failed_station_count = 0
+def build_observation_batch(captured_at: datetime,observations: list[dict,Any], stations_requested:set[str], failed_stations:set[set[str]]) -> dict[str,Any]:
+    return {
+        "captured_at_utc": captured_at.isoformat(),
+        "stations_requested": sorted(stations_requested),
+        "stations_failed": sorted(failed_stations),
+        "source": DATA_SOURCE,
+        "schema_version": 1,
+        "observations": observations
+        
+    }
+
+def collect_station_observation_json(unique_station_set: set[str]) -> tuple[list[dict[str, Any]], set[str]]:
+    nws_observation_json: list[dict[str, Any]] = []
+    failed_stations: set[str] = set()
     started_at = time.perf_counter()
+    session = create_nws_session()
     for station_id in unique_station_set:
         try:
-            response = fetch_latest_observation(station_id)
-            nws_observations.append(response)
-            logger.info("Fetched latest observation: station_id=%s", station_id)
+            response = fetch_latest_observation_json(station_id, session=session)
+            nws_observation_json.append(response)
+            logger.info("Fetched latest observation json: station_id=%s", station_id)
         except requests.exceptions.RequestException:
-            failed_station_count += 1
-            logger.warning("NWS request failed: station_id=%s", station_id, exc_info=True)
-        except ValidationError:
-            failed_station_count += 1
-            logger.warning("NWS payload validation failed: station_id=%s", station_id, exc_info=True)
+            failed_stations.add(station_id)
+            logger.warning("NWS request failed for raw json: station_id=%s", station_id, exc_info=True)
+        except ValueError:
+            failed_stations.add(station_id)
+            logger.warning("NWS json parse failed: station_id=%s", station_id, exc_info=True)
     elapsed_seconds = time.perf_counter() - started_at
-    
+
     logger.info(
-        "NWS collection complete: total_stations=%s successful_observations=%s failed_stations=%s elapsed_seconds=%.3f",
+        "NWS raw json collection complete: total_stations=%s successful_observations=%s failed_stations=%s elapsed_seconds=%.3f",
         len(unique_station_set),
-        len(nws_observations),
-        failed_station_count,
+        len(nws_observation_json),
+        len(failed_stations),
         elapsed_seconds,
     )
-    return nws_observations
+    return nws_observation_json, failed_stations
+
+def compute_weather_file_name(utc_time_prefix:datetime):
+    time_stamp = utc_time_prefix.strftime("%Y-%m-%dT%H-%M-%SZ")
+    return f'{TEMP_OBSERVATION_FILE_PREFIX}/{time_stamp}.json'
+
 
 def lambda_handler(event, context):
     configure_logging(level=os.getenv("LOG_LEVEL", "INFO"), service="pipeline.weather.nws_capture_lambda")
@@ -80,9 +102,18 @@ def lambda_handler(event, context):
     mapping_file_path =load_base_stations_mapping_file(object_store, mapping_file_key)
     beat_to_station = build_beat_station_mapping(mapping_file_path)
     unique_station_set = get_unique_station_ids(beat_to_station)
-    nws_observations: list[NwsStationObservation] = collect_station_observations(unique_station_set)
-    for nws_obs in nws_observations:
-        print(nws_obs)
-
+    now_utc = datetime.now(timezone.utc)
+    s3_file_name = compute_weather_file_name(now_utc)
+    nws_observations_json, failed_stations = collect_station_observation_json(unique_station_set)
+    
+    s3_payload = build_observation_batch(
+        captured_at= now_utc,
+        observations=nws_observations_json,
+        stations_requested= unique_station_set,
+        failed_stations= failed_stations
+    )
+    json_bytes = json.dumps(s3_payload,default=str).encode('utf-8')
+    object_store.put_object(s3_file_name,json_bytes)
+    
 if __name__ == "__main__":
     lambda_handler({}, None)
