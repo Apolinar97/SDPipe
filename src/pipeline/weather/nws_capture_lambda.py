@@ -1,16 +1,19 @@
 from __future__ import annotations
-import requests
 import json
 from pathlib import Path
-from dataclasses import dataclass
 import os
+import time
+import requests
+from pydantic import ValidationError
 from pipeline.storage.object_store import ObjectStore
 from pipeline.config.object_store_config import ObjectStoreConfig
-from pipeline.weather.models import NwsStationObservation, BeatStationMapping
+from pipeline.logging_config import configure_logging, get_logger
+from pipeline.weather.models import BeatStationMapping, NwsStationObservation
+from pipeline.weather.nws_api_fetcher import fetch_latest_observation
 
 TEMP_DIR_ROOT = os.getenv('TEMP_DIR_ROOT', '/tmp')  # Default to /tmp if not set
-API_URL = 'https://api.weather.gov'
 object_store = None
+logger = get_logger(__name__)
 
 def require_env(var_name):
     value = os.getenv(var_name)
@@ -30,9 +33,6 @@ def load_base_stations_mapping_file(object_store: ObjectStore, mapping_file_key:
     object_store.download_object(mapping_file_key, str(local_path))
     return local_path
 
-def unique_station_ids(beatStationMapping: BeatStationMapping) -> set:
-    pass
-
 def build_beat_station_mapping(mapping_file_path:Path)-> list[BeatStationMapping]:
     if not mapping_file_path.exists():
         raise FileNotFoundError(f"Mapping file not found at '{mapping_file_path}'")
@@ -44,21 +44,34 @@ def build_beat_station_mapping(mapping_file_path:Path)-> list[BeatStationMapping
 def get_unique_station_ids(list_of_bts: list[BeatStationMapping])-> set[str]:
     return {bts.station_id for bts in list_of_bts if bts.station_id}
 
-def fetch_nws_observation_by_station_id(station_id:str, require_qc:bool=True ) -> NwsStationObservation:
-    try:
-        api_url = API_URL + f'/stations/{station_id}/observations/latest'
-        params = {
-            "require_qc":str(require_qc).lower()
-        }
-        response = requests.get(api_url,params=params,timeout=10)
-        response.raise_for_status()
-        response_json = response.json()
-        observation = NwsStationObservation.model_validate(response_json)
-        return observation
-    except requests.RequestException as e:
-        print(f'Error:{e}')
+def collect_station_observations(unique_station_set:set[str]) -> list[NwsStationObservation]:
+    nws_observations : list[NwsStationObservation] = []
+    failed_station_count = 0
+    started_at = time.perf_counter()
+    for station_id in unique_station_set:
+        try:
+            response = fetch_latest_observation(station_id)
+            nws_observations.append(response)
+            logger.info("Fetched latest observation: station_id=%s", station_id)
+        except requests.exceptions.RequestException:
+            failed_station_count += 1
+            logger.warning("NWS request failed: station_id=%s", station_id, exc_info=True)
+        except ValidationError:
+            failed_station_count += 1
+            logger.warning("NWS payload validation failed: station_id=%s", station_id, exc_info=True)
+    elapsed_seconds = time.perf_counter() - started_at
+    
+    logger.info(
+        "NWS collection complete: total_stations=%s successful_observations=%s failed_stations=%s elapsed_seconds=%.3f",
+        len(unique_station_set),
+        len(nws_observations),
+        failed_station_count,
+        elapsed_seconds,
+    )
+    return nws_observations
 
 def lambda_handler(event, context):
+    configure_logging(level=os.getenv("LOG_LEVEL", "INFO"), service="pipeline.weather.nws_capture_lambda")
     global object_store
     if object_store is None:
         object_store_config = get_object_store_config()
@@ -66,11 +79,10 @@ def lambda_handler(event, context):
     mapping_file_key = require_env('MAPPING_FILE_KEY')
     mapping_file_path =load_base_stations_mapping_file(object_store, mapping_file_key)
     beat_to_station = build_beat_station_mapping(mapping_file_path)
-    unique_station_ids = get_unique_station_ids(beat_to_station)
-    test_station = unique_station_ids.pop()
-    val = fetch_nws_observation_by_station_id(test_station)
-    print(val)
-    
-    
+    unique_station_set = get_unique_station_ids(beat_to_station)
+    nws_observations: list[NwsStationObservation] = collect_station_observations(unique_station_set)
+    for nws_obs in nws_observations:
+        print(nws_obs)
+
 if __name__ == "__main__":
     lambda_handler({}, None)
