@@ -60,7 +60,6 @@ jobs:
           MAPPING_FILE_KEY: ${{ vars.MAPPING_FILE_KEY }}
           TEMP_OBSERVATION_FILE_PREFIX: ${{ vars.TEMP_OBSERVATION_FILE_PREFIX }}
           LAMBDA_LOG_LEVEL: ${{ vars.LAMBDA_LOG_LEVEL }}
-          SCHEDULE_EXPRESSION: ${{ vars.SCHEDULE_EXPRESSION }}
           SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
         run: |
           sam deploy \
@@ -76,5 +75,4 @@ jobs:
               MappingFileKey="${MAPPING_FILE_KEY:-beat_station_mapping_V1.json}" \
               TempObservationFilePrefix="${TEMP_OBSERVATION_FILE_PREFIX:-nws_observations}" \
               LogLevel="${LAMBDA_LOG_LEVEL:-INFO}" \
-              ScheduleExpression="${SCHEDULE_EXPRESSION:-rate(1 hour)}" \
               ScheduleEnabled="${SCHEDULE_ENABLED:-true}"
