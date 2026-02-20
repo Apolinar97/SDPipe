@@ -12,8 +12,12 @@ class ObjectStore:
         self.endpoint = config.endpoint
         self.access_key = config.access_key
         self.secret_key = config.secret_key
+        self.region = config.region
         self.bucket_name = config.bucket_name
-        client_kwargs = {"config": Config(signature_version="s3v4"), "region_name": "us-east-1"}
+        client_kwargs = {
+            "config": Config(signature_version="s3v4"),
+            "region_name": self.region or "us-east-1",
+        }
         if self.endpoint:
             client_kwargs["endpoint_url"] = self.endpoint
         if self.access_key:
@@ -30,20 +34,20 @@ class ObjectStore:
             response = self.client.list_objects_v2(Bucket=self._bucket(bucket_name), Prefix=prefix)
             contents = response.get("Contents", [])
             return [obj["Key"] for obj in contents]
-        except Exception as e:
+        except ClientError as e:
             logger.exception("Failed to list objects: prefix=%s bucket=%s", prefix, self._bucket(bucket_name))
             return []
     
     def download_object(self, key: str, destination: str, bucket_name: str | None = None):
         try:
             self.client.download_file(self._bucket(bucket_name), key, destination)
-        except Exception as e:
+        except ClientError as e:
             raise RuntimeError(f"Error downloading object '{key}' to '{destination}': {e}") from e
 
     def upload_file(self, source: str, key: str, bucket_name: str | None = None):
         try:
             self.client.upload_file(source, self._bucket(bucket_name), key)
-        except Exception as e:
+        except ClientError as e:
             raise RuntimeError(f"Error uploading file '{source}' to '{key}': {e}") from e
     
     def put_object(self, key:str, data:bytes, content_type:str = "application/json", bucket_name:str| None=None):
@@ -54,7 +58,7 @@ class ObjectStore:
                 Body = data,
                 ContentType = content_type
             )
-        except Exception as e:
+        except ClientError as e:
             raise RuntimeError(f'Error putting object {key} to bucket {bucket_name} ') from e
     
 
