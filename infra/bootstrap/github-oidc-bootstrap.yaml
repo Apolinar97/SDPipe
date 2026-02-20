@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Bootstrap IAM resources for GitHub Actions OIDC deployments.
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Description: GitHub organization or username that owns the repository.
+  GitHubRepo:
+    Type: String
+    Description: Repository name.
+  BranchName:
+    Type: String
+    Default: main
+    Description: Branch allowed to assume the deploy role.
+  DeployRoleName:
+    Type: String
+    Default: GitHubActionsSamDeployRole
+    Description: Name for the IAM role used by GitHub Actions.
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+
+  GitHubActionsDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref DeployRoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: sts:AssumeRoleWithWebIdentity
+            Principal:
+              Federated: !Ref GitHubOidcProvider
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${GitHubRepo}:ref:refs/heads/${BranchName}
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+      Policies:
+        - PolicyName: GitHubActionsSamDeploy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - cloudformation:*
+                  - lambda:*
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:AttachRolePolicy
+                  - iam:DetachRolePolicy
+                  - iam:PutRolePolicy
+                  - iam:DeleteRolePolicy
+                  - iam:GetRole
+                  - iam:PassRole
+                  - iam:TagRole
+                  - iam:UntagRole
+                  - events:*
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:PutBucket*
+                  - s3:GetBucket*
+                  - s3:ListBucket
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:DeleteObject
+                Resource: '*'
+
+Outputs:
+  DeployRoleArn:
+    Description: ARN to store as the AWS_DEPLOY_ROLE_ARN GitHub Actions secret.
+    Value: !GetAtt GitHubActionsDeployRole.Arn

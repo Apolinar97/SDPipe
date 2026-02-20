@@ -1,0 +1,80 @@
+name: deploy-sam
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - template.yaml
+      - src/**
+      - src/requirements.txt
+      - .github/workflows/deploy-sam.yaml
+      - infra/bootstrap/github-oidc-bootstrap.yaml
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  STACK_NAME: sdpipe-weather-dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup SAM CLI
+        uses: aws-actions/setup-sam@v2
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          role-session-name: github-actions-sdpipeline-deploy
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Validate required repository variables
+        env:
+          WEATHER_BUCKET_NAME: ${{ vars.WEATHER_BUCKET_NAME }}
+        run: |
+          if [ -z "${WEATHER_BUCKET_NAME}" ]; then
+            echo "Missing required GitHub variable: WEATHER_BUCKET_NAME"
+            exit 1
+          fi
+
+      - name: Build SAM application
+        run: sam build --template-file template.yaml --cached
+
+      - name: Deploy SAM stack
+        env:
+          WEATHER_BUCKET_NAME: ${{ vars.WEATHER_BUCKET_NAME }}
+          MAPPING_FILE_KEY: ${{ vars.MAPPING_FILE_KEY }}
+          TEMP_OBSERVATION_FILE_PREFIX: ${{ vars.TEMP_OBSERVATION_FILE_PREFIX }}
+          LAMBDA_LOG_LEVEL: ${{ vars.LAMBDA_LOG_LEVEL }}
+          SCHEDULE_EXPRESSION: ${{ vars.SCHEDULE_EXPRESSION }}
+          SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
+        run: |
+          sam deploy \
+            --stack-name "${STACK_NAME}" \
+            --region "${AWS_REGION}" \
+            --capabilities CAPABILITY_IAM \
+            --resolve-s3 \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --parameter-overrides \
+              EnvironmentName=dev \
+              WeatherBucketName="${WEATHER_BUCKET_NAME}" \
+              MappingFileKey="${MAPPING_FILE_KEY:-beat_station_mapping_V1.json}" \
+              TempObservationFilePrefix="${TEMP_OBSERVATION_FILE_PREFIX:-nws_observations}" \
+              LogLevel="${LAMBDA_LOG_LEVEL:-INFO}" \
+              ScheduleExpression="${SCHEDULE_EXPRESSION:-rate(1 hour)}" \
+              ScheduleEnabled="${SCHEDULE_ENABLED:-true}"
