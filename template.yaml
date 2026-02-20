@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: SDPipe weather capture Lambda (NWS to S3)
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: dev
+    Description: Deployment environment suffix.
+  WeatherBucketName:
+    Type: String
+    Description: S3 bucket where mapping input and weather output are stored.
+  MappingFileKey:
+    Type: String
+    Default: beat_station_mapping_V1.json
+    Description: S3 key for beat-to-station mapping JSON.
+  TempObservationFilePrefix:
+    Type: String
+    Default: nws_observations
+    Description: Output key prefix for captured weather payloads.
+  LogLevel:
+    Type: String
+    Default: INFO
+    AllowedValues:
+      - DEBUG
+      - INFO
+      - WARNING
+      - ERROR
+      - CRITICAL
+    Description: Python logger level for the lambda runtime.
+  ScheduleExpression:
+    Type: String
+    Default: rate(1 hour)
+    Description: EventBridge schedule expression for capture frequency.
+  ScheduleEnabled:
+    Type: String
+    Default: "true"
+    AllowedValues:
+      - "true"
+      - "false"
+    Description: Whether the EventBridge schedule is enabled.
+
+Conditions:
+  IsScheduleEnabled: !Equals [!Ref ScheduleEnabled, "true"]
+
+Resources:
+  NwsCaptureFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub sdpipe-nws-capture-${EnvironmentName}
+      CodeUri: src/
+      Handler: pipeline.weather.nws_capture_lambda.lambda_handler
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      Timeout: 180
+      MemorySize: 512
+      Environment:
+        Variables:
+          LOG_LEVEL: !Ref LogLevel
+          AWS_S3_WEATHER_BUCKET_NAME: !Ref WeatherBucketName
+          MAPPING_FILE_KEY: !Ref MappingFileKey
+          TEMP_OBSERVATION_FILE_PREFIX: !Ref TempObservationFilePrefix
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Sid: ListWeatherBucket
+              Effect: Allow
+              Action:
+                - s3:ListBucket
+              Resource: !Sub arn:aws:s3:::${WeatherBucketName}
+            - Sid: ReadWriteWeatherObjects
+              Effect: Allow
+              Action:
+                - s3:GetObject
+                - s3:PutObject
+              Resource: !Sub arn:aws:s3:::${WeatherBucketName}/*
+      Events:
+        HourlyCapture:
+          Type: Schedule
+          Properties:
+            Name: !Sub sdpipe-nws-capture-${EnvironmentName}
+            Description: Trigger NWS weather capture for beat mapping.
+            Schedule: !Ref ScheduleExpression
+            Enabled: !If [IsScheduleEnabled, true, false]
+
+Outputs:
+  NwsCaptureFunctionName:
+    Description: Lambda function name.
+    Value: !Ref NwsCaptureFunction
+  NwsCaptureFunctionArn:
+    Description: Lambda function ARN.
+    Value: !GetAtt NwsCaptureFunction.Arn
