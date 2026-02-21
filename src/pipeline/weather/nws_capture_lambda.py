@@ -100,9 +100,10 @@ def collect_station_observation_json(unique_station_set: set[str]) -> tuple[list
     )
     return nws_observation_json, failed_stations
 
-def compute_weather_file_name(utc_time_prefix:datetime) -> str:
+def compute_weather_file_key(utc_time_prefix:datetime) -> str:
+    file_name_prefix = utc_time_prefix.strftime('%Y-%m-%d')
     time_stamp = utc_time_prefix.strftime("%Y-%m-%dT%H-%M-%SZ")
-    return f'{TEMP_OBSERVATION_FILE_PREFIX}/{time_stamp}.json'
+    return f'{TEMP_OBSERVATION_FILE_PREFIX}/{file_name_prefix}/{time_stamp}.json'
 
 
 def lambda_handler(event, context):
@@ -117,9 +118,8 @@ def lambda_handler(event, context):
         beat_to_station = build_beat_station_mapping(mapping_file_path)
         unique_station_set = get_unique_station_ids(beat_to_station)
         now_utc = datetime.now(timezone.utc)
-        s3_file_name = compute_weather_file_name(now_utc)
+        s3_file_key = compute_weather_file_key(now_utc)
         nws_observations_json, failed_stations = collect_station_observation_json(unique_station_set)
-        
         s3_payload = build_observation_batch(
             captured_at= now_utc,
             observations=nws_observations_json,
@@ -127,8 +127,8 @@ def lambda_handler(event, context):
             failed_stations= failed_stations
         )
         json_bytes = json.dumps(s3_payload,default=str).encode('utf-8')
-        object_store.put_object(s3_file_name,json_bytes)
-        logger.info(f'Uploaded NWS Observation batch: key:{s3_file_name}, Observations: {nws_observations_json}, failed: {len(failed_stations)}')
+        object_store.put_object(s3_file_key,json_bytes)
+        logger.info(f'Uploaded NWS Observation batch: key:{s3_file_key}, Observations: {nws_observations_json}, failed: {len(failed_stations)}')
     except Exception:
         logger.exception(f"Unhandled error in nws_capture_lambda")
         raise
