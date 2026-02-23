@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: stg_collisions_basic
+    description: 'Standardized collision records from SDPD'
+    columns:
+      - name: report_id
+        description: 'Unique identifier for each collision report'
+        data_tests:
+          - unique
+          - not_null
+      - name: report_datetime
+        description: 'Date and time when the collision was reported'
+        data_tests:
+          - not_null
