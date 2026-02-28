@@ -6,3 +6,5 @@ sources:
     tables:
       - name: collisions_basic
         description: "Raw collision records loaded from SDPD CSV"
+      - name: collisions_details
+        description: "Raw collision details records loaded from SDPD CSV"

@@ -1,9 +1,17 @@
-SELECT 
-	--Basic WHEN info
-	report_id, 
+SELECT
+	-- Keys/Time
+	report_id,
 	date_time::timestamp as report_datetime,
-	date_time:: date as report_date,
+	date_time::date as report_date,
 	EXTRACT(HOUR FROM date_time) as report_hour,
+	-- Collision participants
+	NULLIF(TRIM(person_role), '') as person_role,
+	NULLIF(TRIM(person_injury_lvl),'') as person_injury_level,
+	NULLIF(TRIM(person_veh_type),'') as person_vehicle_type,
+	NULLIF(TRIM(veh_type),'') as vehicle_type,
+	NULLIF(TRIM(veh_make),'') as vehicle_make,
+	NULLIF(TRIM(veh_model),'') as vehicle_model,
+	-- Location
 	police_beat,
 	--Primary Address
 	NULLIF(TRIM(address_no_primary),'') as street_number,
@@ -15,22 +23,17 @@ SELECT
 	NULLIF(TRIM(address_pd_intersecting),'') as intersection_direction,
 	NULLIF(TRIM(address_name_intersecting),'') as intersecting_street,
 	NULLIF(TRIM(address_sfx_intersecting),'') as intersecting_street_type,
-	
+
 	-- Vioation Info
 	NULLIF(TRIM(violation_section),'') as violation_section,
 	NULLIF(TRIM(violation_type),'') as violation_type,
 	NULLIF(TRIM(charge_desc),'') as primary_violation_description,
 
-	-- casualties
+	-- Casulaties
 	injured,
 	killed,
 	NULLIF(TRIM(hit_run_lvl),'') as hit_run_level,
-	--Other
-	CASE WHEN killed >0 THEN TRUE ELSE FALSE END as is_fatal,
-	CASE WHEN injured > 0 THEN TRUE ELSE FALSE END AS has_injuries,
-	CASE WHEN NULLIF(TRIM(hit_run_lvl), '') IS NOT NULL THEN TRUE ELSE FALSE END AS is_hit_and_run,
-	CASE WHEN NULLIF(TRIM(address_name_intersecting), '') IS NOT NULL THEN TRUE ELSE FALSE END AS is_intersection_collision,
 	snapshot_dt,
 	source_file,
 	load_ts
-from {{source ('raw', 'collisions_basic')}}
+from {{source ('raw', 'collisions_details')}}
