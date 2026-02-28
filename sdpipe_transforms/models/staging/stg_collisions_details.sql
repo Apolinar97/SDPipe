@@ -35,5 +35,6 @@ SELECT
 	NULLIF(TRIM(hit_run_lvl),'') as hit_run_level,
 	snapshot_dt,
 	source_file,
+	source_row_num::integer as source_row_num,
 	load_ts
 from {{source ('raw', 'collisions_details')}}

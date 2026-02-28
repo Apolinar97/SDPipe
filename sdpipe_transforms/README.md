@@ -1,15 +1,28 @@
-Welcome to your new dbt project!
+# sdpipe_transforms
 
-### Using the starter project
+dbt project for SDPipe collision models.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Setup
+From this directory with the project virtualenv activated:
 
+```bash
+dbt deps
+dbt debug
+```
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [chat](https://community.getdbt.com/) on Slack for live discussions and support
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+`dbt deps` is required because this project uses `dbt_utils`, declared in `packages.yml`.
+
+## Common commands
+Run the full project:
+
+```bash
+dbt run
+dbt test
+```
+
+Run the collision models touched by the participant identity work:
+
+```bash
+dbt run --select stg_collisions_basic stg_collisions_details int_collisions_basic int_collisions_details audit_collisions_details_repeated_rows
+dbt test --select stg_collisions_basic stg_collisions_details int_collisions_basic int_collisions_details audit_collisions_details_repeated_rows test_int_collisions_details_preserves_staging_rows
+```

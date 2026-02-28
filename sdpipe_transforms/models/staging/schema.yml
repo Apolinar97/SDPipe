@@ -6,10 +6,25 @@ models:
     columns:
       - name: report_id
         description: 'Unique identifier for each collision report'
-        data_tests:
+        tests:
           - unique
           - not_null
       - name: report_datetime
         description: 'Date and time when the collision was reported'
-        data_tests:
+        tests:
+          - not_null
+  - name: stg_collisions_details
+    description: 'Standardized collision participant records from SDPD'
+    columns:
+      - name: report_id
+        description: 'Collision report identifier for the participant row'
+        tests:
+          - not_null
+      - name: report_datetime
+        description: 'Date and time when the collision was reported'
+        tests:
+          - not_null
+      - name: source_row_num
+        description: 'CSV line number for the participant row, starting at 2 for the first data row'
+        tests:
           - not_null

@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: int_collisions_basic
+    description: 'Intermediate collision records at report grain, with one row per report_id. Join participant-level models to this model on report_id.'
+    columns:
+      - name: report_id
+        description: 'Unique identifier for each collision report and the join key from participant rows back to report-grain models'
+        tests:
+          - unique
+          - not_null
+  - name: int_collisions_details
+    description: 'Intermediate collision participant records at participant-row grain, with one row per ingested participant line. Use collision_detail_id for participant-grain joins and report_id only when rolling back up to the collision report.'
+    columns:
+      - name: collision_detail_id
+        description: 'Stable row-level surrogate key for participant-grain joins, built from snapshot_dt, source_file, and source_row_num'
+        tests:
+          - unique
+          - not_null
+      - name: collision_detail_fingerprint
+        description: 'Content-based fingerprint for duplicate analysis only; not unique and not safe for row-level joins'
+      - name: report_id
+        description: 'Collision report identifier for joining participant rows back to report-grain models'
+        tests:
+          - not_null
+          - relationships:
+              to: ref('int_collisions_basic')
+              field: report_id
+  - name: audit_collisions_details_repeated_rows
+    description: 'Audit view that flags repeated participant fingerprints within a collision report'
+    columns:
+      - name: report_id
+        description: 'Collision report identifier where repeated participant rows were found'
+        tests:
+          - not_null
+      - name: collision_detail_fingerprint
+        description: 'Content-based fingerprint shared by repeated participant rows'
+        tests:
+          - not_null
+      - name: repeated_row_count
+        description: 'Number of rows in the report sharing the same participant fingerprint'
+        tests:
+          - not_null
+      - name: is_suspicious_repeat
+        description: 'Always true in this filtered audit model'
+        tests:
+          - not_null
