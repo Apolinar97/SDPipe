@@ -4,8 +4,10 @@ import csv
 from datetime import date
 from pipeline.staging.data_config import STAGING_DATASETS, StagingDataConfig
 from pipeline.db import get_connection
+from pipeline.config.object_store_env import get_object_store_config
 from pipeline.logging_config import configure_logging, get_logger
 from pipeline.storage.object_store import ObjectStore
+
 
 logger = get_logger(__name__)
 
@@ -157,7 +159,7 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectS
 def main() -> None:
     configure_logging(level=os.getenv("LOG_LEVEL", "INFO"), service="pipeline.staging")
     run_date = _get_run_date()
-    store = ObjectStore()
+    store = ObjectStore(get_object_store_config("AWS_S3_BUCKET_NAME"))
     total_inserted_rows = 0
     logger.info("Starting staging load: run_date=%s datasets=%s bucket=%s", run_date.isoformat(), len(STAGING_DATASETS), store.bucket_name)
     try:
