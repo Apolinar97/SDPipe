@@ -7,7 +7,7 @@ import psycopg
 from pipeline.db import get_connection
 from pipeline.logging_config import configure_logging, get_logger
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SQL_DIRS = [
     PROJECT_ROOT / "sql" / "ddl",
 ]
@@ -26,13 +26,16 @@ def execute_sql_file(conn: psycopg.Connection, path: Path):
     sql = path.read_text(encoding="utf-8")
     if not sql.strip():
         logger.warning("Skipping empty SQL file: path=%s", path)
-        return
+        return True
     with conn.cursor() as cur:
         try:
             cur.execute(sql)
             logger.info("Executed SQL file: path=%s", path)
+            return True
         except Exception:
+            conn.rollback()
             logger.exception("Error executing SQL file: path=%s", path)
+            return False
 
 def main():
     configure_logging(service="scripts.migrate")
@@ -40,11 +43,16 @@ def main():
     if not files:
         logger.warning("No SQL files found in configured directories.")
         return
+    failed_files: list[Path] = []
     with get_connection() as conn:
         for file in files:
             rel = file.relative_to(PROJECT_ROOT)
             logger.info("Executing SQL file: path=%s", rel)
-            execute_sql_file(conn, file)
+            if not execute_sql_file(conn, file):
+                failed_files.append(file)
+    if failed_files:
+        failed_paths = ", ".join(str(path.relative_to(PROJECT_ROOT)) for path in failed_files)
+        raise RuntimeError(f"Migration failed for: {failed_paths}")
     logger.info("All SQL files executed.")
 if __name__ == "__main__":
     main()

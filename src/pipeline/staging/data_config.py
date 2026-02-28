@@ -10,6 +10,7 @@ class StagingDataConfig:
     required_columns: tuple[str, ...]
     integer_columns: tuple[str, ...] = ()
     timestamp_columns: tuple[str, ...] = ()
+    generated_columns: tuple[str, ...] = ()
     
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
@@ -81,7 +82,8 @@ COLLISIONS_STAGING_DETAILS = StagingDataConfig(
     integer_columns=(
         "police_beat", "injured","killed"
     ),
-    timestamp_columns=("date_time",)
+    timestamp_columns=("date_time",),
+    generated_columns=("source_row_num",),
 )
 
 STAGING_DATASETS: tuple[StagingDataConfig, ...] = (
