@@ -83,10 +83,12 @@ def _normalize_row(config: StagingDataConfig, row: dict[str, str | None], snapsh
 
     row_values.append(snapshot_dt)
     row_values.append(source_file)
+    if "source_row_num" in config.generated_columns:
+        row_values.append(row_num)
     return tuple(row_values)
 
 def _build_insert_sql(config: StagingDataConfig) -> str:
-    insert_columns = list(config.columns) + ["snapshot_dt", "source_file"]
+    insert_columns = list(config.columns) + ["snapshot_dt", "source_file"] + list(config.generated_columns)
     placeholders = ", ".join(["%s"] * len(insert_columns))
     return (
         f"INSERT INTO {config.table_name} "

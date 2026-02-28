@@ -26,6 +26,7 @@ CREATE TABLE
         hit_run_lvl TEXT NULL,
         snapshot_dt DATE NOT NULL,
         source_file TEXT NOT NULL,
+        source_row_num INTEGER NOT NULL,
         load_ts TIMESTAMPTZ NOT NULL DEFAULT now ()
     );
 
@@ -34,3 +35,5 @@ CREATE INDEX IF NOT EXISTS ix_stg_details_report_id ON raw.collisions_details (r
 CREATE INDEX IF NOT EXISTS ix_stg_details_snapshot_dt ON raw.collisions_details (snapshot_dt);
 
 CREATE INDEX IF NOT EXISTS ix_stg_details_report_snapshot ON raw.collisions_details (report_id, snapshot_dt);
+
+CREATE INDEX IF NOT EXISTS ix_stg_details_snapshot_file_rownum ON raw.collisions_details (snapshot_dt, source_file, source_row_num);
