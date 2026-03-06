@@ -5,8 +5,7 @@ WITH base AS (
 )
 SELECT
     {{ dbt_utils.generate_surrogate_key([
-        'snapshot_dt',
-        'source_file',
+        'report_id',
         'source_row_num'
     ]) }} AS collision_detail_id,
     {{ dbt_utils.generate_surrogate_key([
