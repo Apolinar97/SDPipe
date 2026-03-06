@@ -1,0 +1,81 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Calendar date dimension (2015–present), one row per day
+    columns:
+      - name: date_key
+        description: Integer surrogate key in YYYYMMDD format
+        tests:
+          - unique
+          - not_null
+      - name: date_day
+        tests:
+          - not_null
+
+  - name: dim_violation
+    description: Distinct violation profiles from collision reports
+    columns:
+      - name: violation_key
+        description: Surrogate key over (violation_section, violation_type, primary_violation_description)
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_person
+    description: Distinct participant profiles from collision details
+    columns:
+      - name: person_key
+        description: Surrogate key over (person_role, person_injury_level, person_vehicle_type, vehicle_type, vehicle_make, vehicle_model)
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_collision_reports
+    description: One row per collision report; collision-level context and measures for the star schema
+    columns:
+      - name: report_id
+        description: Natural key from SDPD source data, unique per collision report
+        tests:
+          - unique
+          - not_null
+      - name: violation_key
+        description: FK to dim_violation (surrogate over violation_section, violation_type, primary_violation_description)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_violation')
+              field: violation_key
+
+  - name: fct_collision_participants
+    description: Fact table at participant grain — one row per person involved in a collision
+    columns:
+      - name: collision_detail_id
+        description: Stable surrogate key over (report_id, source_row_num)
+        tests:
+          - unique
+          - not_null
+      - name: report_id
+        description: FK to dim_collision_reports
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_collision_reports')
+              field: report_id
+      - name: date_key
+        description: FK to dim_date (YYYYMMDD integer derived from report_date)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+      - name: person_key
+        description: FK to dim_person
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_person')
+              field: person_key
+      - name: is_duplicate_participant
+        tests:
+          - not_null
