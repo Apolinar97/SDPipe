@@ -1,5 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class StagingDataConfig:
@@ -11,6 +11,7 @@ class StagingDataConfig:
     integer_columns: tuple[str, ...] = ()
     timestamp_columns: tuple[str, ...] = ()
     generated_columns: tuple[str, ...] = ()
+    column_renames: dict[str, str] = field(default_factory=dict)
     
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
@@ -86,7 +87,29 @@ COLLISIONS_STAGING_DETAILS = StagingDataConfig(
     generated_columns=("source_row_num",),
 )
 
+COLLISIONS_STAGING_BEATS = StagingDataConfig(
+    name="staging_collisions_beats",
+    table_name="raw.collisions_beats",
+    daily_file_name="pd_beats_datasd.csv",
+    columns = (
+        "objectid",
+        "beat",
+        "div",
+        "serv",
+        "name"
+    ),
+    required_columns=(
+        "objectid",
+        "beat",
+        "div",
+        "serv",
+    ),
+    integer_columns=("beat",),
+    column_renames={"objectid": "object_id"}
+)
+
 STAGING_DATASETS: tuple[StagingDataConfig, ...] = (
     COLLISIONS_STAGING_BASIC,
     COLLISIONS_STAGING_DETAILS,
+    COLLISIONS_STAGING_BEATS
 )

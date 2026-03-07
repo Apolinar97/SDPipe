@@ -13,7 +13,7 @@ models:
     description: 'Intermediate collision participant records at participant-row grain, with one row per ingested participant line. Use collision_detail_id for participant-grain joins and report_id only when rolling back up to the collision report.'
     columns:
       - name: collision_detail_id
-        description: 'Stable row-level surrogate key for participant-grain joins, built from source_file and source_row_num. Stable across pipeline runs for append-only CSV sources where row positions do not change.'
+        description: 'Stable row-level surrogate key for participant-grain joins, built from report_id and source_row_num. Stable across pipeline runs regardless of source file name changes.'
         tests:
           - unique
           - not_null
