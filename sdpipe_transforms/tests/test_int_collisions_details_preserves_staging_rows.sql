@@ -1,8 +1,7 @@
 WITH staging_counts AS (
     SELECT
         {{ dbt_utils.generate_surrogate_key([
-            'snapshot_dt',
-            'source_file',
+            'report_id',
             'source_row_num'
         ]) }} AS collision_detail_id,
         count(*) AS staging_row_count
