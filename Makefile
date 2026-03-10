@@ -14,11 +14,11 @@ DBT := $(VENV)/bin/dbt
 PYTHONPATH := $(CURDIR)/src
 DBT_PROJECT_DIR := $(CURDIR)/sdpipe_transforms
 DBT_PROFILES_DIR ?= $(HOME)/.dbt
-RUN_DATE ?= $(if $(strip $(STAGING_RUN_DATE)),$(STAGING_RUN_DATE),$(shell date +%F))
+RUN_DATE ?= $(if $(strip $(STAGING_RUN_DATE)),$(STAGING_RUN_DATE),$(shell date -u +%F))
 
 REQUIRED_ENV_VARS := DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD AWS_S3_ENDPOINT AWS_S3_ACCESS_KEY AWS_S3_SECRET_KEY AWS_S3_BUCKET_NAME AWS_REGION STAGING_SOURCE_ROOT
 
-.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate stage-load dbt-deps dbt-debug dbt-run dbt-test run
+.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load dbt-deps dbt-debug dbt-run dbt-test run
 
 help:
 	@printf "%s\n" \
@@ -35,6 +35,7 @@ help:
 		"  wait-minio         Wait for MinIO readiness." \
 		"  wait               Wait for postgres and MinIO readiness." \
 		"  migrate            Run existing SQL migrations." \
+		"  sd-fetch           Download SD city data files to object store." \
 		"  stage-load         Run the existing staging loader." \
 		"  dbt-deps           Install dbt packages for sdpipe_transforms." \
 		"  dbt-debug          Validate the dbt connection/profile." \
@@ -130,6 +131,9 @@ wait: wait-db wait-minio
 migrate:
 	@PYTHONPATH="$(PYTHONPATH)" "$(PYTHON)" scripts/migrate.py
 
+sd-fetch: check-env  ## Download SD city data files to object store
+	@PYTHONPATH="$(PYTHONPATH)" "$(PYTHON)" -m pipeline.sd_data.sd_file_downloader
+
 stage-load:
 	@PYTHONPATH="$(PYTHONPATH)" STAGING_RUN_DATE="$(RUN_DATE)" "$(PYTHON)" -m pipeline.staging.load_staging
 
@@ -145,4 +149,4 @@ dbt-run:
 dbt-test:
 	@"$(DBT)" test --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
 
-run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-debug stage-load dbt-run dbt-test
+run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-debug sd-fetch stage-load dbt-run dbt-test

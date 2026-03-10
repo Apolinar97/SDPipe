@@ -1,7 +1,7 @@
 import os
 import io
 import csv
-from datetime import date
+from datetime import date, datetime, timezone
 from pipeline.staging.data_config import STAGING_DATASETS, StagingDataConfig
 from pipeline.db import get_connection
 from pipeline.config.object_store_env import get_object_store_config
@@ -24,7 +24,7 @@ def _get_batch_size() -> int:
 def _get_run_date() -> date:
     raw = os.getenv("STAGING_RUN_DATE")
     if not raw:
-        return date.today()
+        return datetime.now(timezone.utc).date()
     try:
         return date.fromisoformat(raw)
     except ValueError as exc:
@@ -34,7 +34,7 @@ def _resolve_source_key(config: StagingDataConfig, run_date: date, store: Object
     source_root = os.getenv("STAGING_SOURCE_ROOT", "").rstrip("/")
     if not source_root:
         raise RuntimeError("STAGING_SOURCE_ROOT is required for staging load.")
-    key = f"{source_root}/{run_date.isoformat()}/{config.daily_file_name}"
+    key = f"{source_root}/{run_date.strftime('%Y-%m-%d')}/{config.daily_file_name}"
     if not store.object_exists(key):
         raise RuntimeError(f"Source file not found for dataset {config.name!r}: bucket={store.bucket_name!r} key={key!r}")
     return key
