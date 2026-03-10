@@ -26,6 +26,17 @@ models:
           - relationships:
               to: ref('int_collisions_basic')
               field: report_id
+  - name: audit_int_collisions_stale_rows
+    description: 'Rows in intermediate that are no longer present in current staging — indicates incremental drift. Use to decide when dbt run --full-refresh is needed.'
+    columns:
+      - name: record_id
+        tests:
+          - not_null
+      - name: model
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['collisions_details', 'collisions_basic']
   - name: audit_collisions_details_repeated_rows
     description: 'Audit view that flags repeated participant fingerprints within a collision report'
     columns:

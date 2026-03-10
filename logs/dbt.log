@@ -88,3 +88,19 @@ Happy modeling!
 [0m23:24:40.800155 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xff4f1af4bbf0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xff4f1b424530>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xff4f1af1fbc0>]}
 [0m23:24:40.800369 [debug] [MainThread]: Flushing usage events
 [0m23:24:41.276985 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m22:34:49.446152 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xfb53d497a3c0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xfb53d4b89f70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xfb53d4a6d160>]}
+
+
+============================== 22:34:49.448757 | e61f884f-b0de-4496-85c7-e0382c1b7bdb ==============================
+[0m22:34:49.448757 [info ] [MainThread]: Running with dbt=1.11.6
+[0m22:34:49.449030 [debug] [MainThread]: running dbt with arguments {'log_cache_events': 'False', 'target_path': 'None', 'version_check': 'True', 'partial_parse': 'True', 'warn_error': 'None', 'fail_fast': 'False', 'use_experimental_parser': 'False', 'invocation_command': 'dbt source freshness', 'log_path': 'logs', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'cache_selected_only': 'False', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True', 'use_colors': 'True', 'empty': 'None', 'write_json': 'True', 'indirect_selection': 'eager', 'profiles_dir': '/home/camacho/.dbt', 'no_print': 'None', 'debug': 'False', 'printer_width': '80', 'introspect': 'True', 'quiet': 'False', 'log_format': 'default'}
+[0m22:34:49.449241 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /home/camacho/repos/SDPipe/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m22:34:49.449736 [debug] [MainThread]: Resource report: {"command_name": "freshness", "command_success": false, "command_wall_clock_time": 0.03179887, "process_in_blocks": "8", "process_kernel_time": 0.100155, "process_mem_max_rss": "98224", "process_out_blocks": "16", "process_user_time": 0.661026}
+[0m22:34:49.449954 [debug] [MainThread]: Command `dbt source freshness` failed at 22:34:49.449918 after 0.03 seconds
+[0m22:34:49.450106 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xfb53d44a12b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xfb53d4a6d160>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0xfb53d459d190>]}
+[0m22:34:49.450275 [debug] [MainThread]: Flushing usage events
+[0m22:34:49.833092 [debug] [MainThread]: An error was encountered while trying to flush usage events

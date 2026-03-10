@@ -1,3 +1,5 @@
+{{ config(unique_key='collision_detail_id') }}
+
 WITH base AS (
     SELECT
         *

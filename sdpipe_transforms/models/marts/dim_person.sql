@@ -1,3 +1,5 @@
+{{ config(unique_key='person_key') }}
+
 WITH distinct_persons AS (
     SELECT DISTINCT
         person_role,

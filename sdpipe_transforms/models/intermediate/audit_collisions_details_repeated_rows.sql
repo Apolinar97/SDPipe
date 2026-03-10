@@ -1,4 +1,21 @@
-WITH grouped AS (
+{{ config(materialized='table') }}
+
+-- Scope to rows present in current staging to avoid false duplicates
+-- from stale incremental rows lingering from previous CSV snapshots
+WITH current_staging_ids AS (
+    SELECT
+        {{ dbt_utils.generate_surrogate_key(['report_id', 'source_row_num']) }} AS collision_detail_id
+    FROM {{ ref('stg_collisions_details') }}
+),
+
+current_details AS (
+    SELECT i.*
+    FROM {{ ref('int_collisions_details') }} i
+    INNER JOIN current_staging_ids s
+        ON i.collision_detail_id = s.collision_detail_id
+),
+
+grouped AS (
     SELECT
         report_id,
         collision_detail_fingerprint,
@@ -15,7 +32,7 @@ WITH grouped AS (
         count(*) AS repeated_row_count,
         min(source_row_num) AS first_source_row_num,
         max(source_row_num) AS last_source_row_num
-    FROM {{ ref('int_collisions_details') }}
+    FROM current_details
     GROUP BY
         report_id,
         collision_detail_fingerprint
