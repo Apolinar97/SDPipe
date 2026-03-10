@@ -1,3 +1,5 @@
+{{ config(unique_key='collision_detail_id') }}
+
 WITH details AS (
     SELECT * FROM {{ ref('int_collisions_details') }}
 ),

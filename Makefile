@@ -18,7 +18,7 @@ RUN_DATE ?= $(if $(strip $(STAGING_RUN_DATE)),$(STAGING_RUN_DATE),$(shell date -
 
 REQUIRED_ENV_VARS := DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD AWS_S3_ENDPOINT AWS_S3_ACCESS_KEY AWS_S3_SECRET_KEY AWS_S3_BUCKET_NAME AWS_REGION STAGING_SOURCE_ROOT
 
-.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load dbt-deps dbt-debug dbt-run dbt-test run
+.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load dbt-deps dbt-debug dbt-run dbt-test pipeline run
 
 help:
 	@printf "%s\n" \
@@ -41,6 +41,7 @@ help:
 		"  dbt-debug          Validate the dbt connection/profile." \
 		"  dbt-run            Run dbt models from sdpipe_transforms." \
 		"  dbt-test           Run dbt tests from sdpipe_transforms." \
+		"  pipeline           Fetch data, load staging, run dbt models and tests (no infra setup)." \
 		"  run                Execute the full local workflow." \
 		"" \
 		"Overridable variables:" \
@@ -148,5 +149,7 @@ dbt-run:
 
 dbt-test:
 	@"$(DBT)" test --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
+
+pipeline: check-tools check-env check-dbt-profile sd-fetch stage-load dbt-run dbt-test
 
 run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-debug sd-fetch stage-load dbt-run dbt-test

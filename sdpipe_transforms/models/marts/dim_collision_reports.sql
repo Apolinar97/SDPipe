@@ -1,3 +1,5 @@
+{{ config(unique_key='report_id') }}
+
 WITH basic AS (
     SELECT * FROM {{ ref('int_collisions_basic') }}
 ),

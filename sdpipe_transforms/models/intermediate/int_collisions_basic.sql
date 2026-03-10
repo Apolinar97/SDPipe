@@ -1,3 +1,5 @@
+{{ config(unique_key='report_id') }}
+
 --Remove Duplicates
 WITH
     ROW_NUM_CTE AS (
