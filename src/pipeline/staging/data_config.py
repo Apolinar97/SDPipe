@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from dataclasses import dataclass, field
+
 
 @dataclass(frozen=True)
 class StagingDataConfig:
@@ -12,7 +14,7 @@ class StagingDataConfig:
     timestamp_columns: tuple[str, ...] = ()
     generated_columns: tuple[str, ...] = ()
     column_renames: dict[str, str] = field(default_factory=dict)
-    
+
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
     table_name="raw.collisions_basic",

@@ -7,5 +7,5 @@ FROM (
     SELECT
         (SELECT count(*) FROM {{ ref('int_collisions_details') }}) AS details_count,
         (SELECT count(*) FROM {{ ref('fct_collision_participants') }}) AS participants_count
-) counts
+) AS counts
 WHERE participants_count < details_count

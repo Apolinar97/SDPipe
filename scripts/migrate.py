@@ -1,9 +1,12 @@
-# Executes SQL DDL statements to create the tables in the database. 
+# Executes SQL DDL statements to create the tables in the database.
 # This will be replaced by a more robust migration tool, since the current implementation will be in AWS as RedShift.
 
 from __future__ import annotations
+
 from pathlib import Path
+
 import psycopg
+
 from pipeline.db import get_connection
 from pipeline.logging_config import configure_logging, get_logger
 

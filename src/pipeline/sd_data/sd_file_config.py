@@ -1,9 +1,12 @@
 import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
+
 import requests
-from pipeline.storage.object_store import ObjectStore
+
 from pipeline.config.object_store_env import get_object_store_config
+from pipeline.storage.object_store import ObjectStore
+
 #https://seshat.datasd.org/traffic_collisions/pd_collisions_datasd.csv
 
 KEY_PREFIX = os.getenv('SD_FILES_PREFIX', 'raw')
@@ -42,11 +45,11 @@ class SdFileConfig:
 @dataclass(frozen=True)
 class SdFileManagerConfig:
     storage: ObjectStore = ObjectStore(get_object_store_config("AWS_S3_BUCKET_NAME"))
-    
+
     collisions_basic_report: SdFileConfig = SdFileConfig(
         data_set_name="collisions_basic_report",
         url = "https://seshat.datasd.org/traffic_collisions/pd_collisions_datasd.csv",
-        key_prefix= KEY_PREFIX        
+        key_prefix= KEY_PREFIX
     )
     collisions_details_report: SdFileConfig = SdFileConfig(
         data_set_name="collisions_details_report",

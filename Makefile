@@ -18,7 +18,7 @@ RUN_DATE ?= $(if $(strip $(STAGING_RUN_DATE)),$(STAGING_RUN_DATE),$(shell date -
 
 REQUIRED_ENV_VARS := DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD AWS_S3_ENDPOINT AWS_S3_ACCESS_KEY AWS_S3_SECRET_KEY AWS_S3_BUCKET_NAME AWS_REGION STAGING_SOURCE_ROOT
 
-.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load dbt-deps dbt-debug dbt-run dbt-test pipeline run
+.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load dbt-deps dbt-debug dbt-run dbt-test pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
 
 help:
 	@printf "%s\n" \
@@ -43,6 +43,12 @@ help:
 		"  dbt-test           Run dbt tests from sdpipe_transforms." \
 		"  pipeline           Fetch data, load staging, run dbt models and tests (no infra setup)." \
 		"  run                Execute the full local workflow." \
+		"  lint-py            Check Python code with Ruff." \
+		"  lint-sql           Check SQL models with SQLFluff." \
+		"  lint               Run all linters (Ruff + SQLFluff)." \
+		"  fmt-py             Auto-format Python code with Ruff." \
+		"  fmt-sql            Auto-fix SQL models with SQLFluff." \
+		"  fmt                Auto-format all code (Ruff + SQLFluff)." \
 		"" \
 		"Overridable variables:" \
 		"  RUN_DATE           Defaults to STAGING_RUN_DATE or today's date." \
@@ -153,3 +159,23 @@ dbt-test:
 pipeline: check-tools check-env check-dbt-profile sd-fetch stage-load dbt-run dbt-test
 
 run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-debug sd-fetch stage-load dbt-run dbt-test
+
+RUFF := $(VENV)/bin/ruff
+SQLFLUFF := $(VENV)/bin/sqlfluff
+
+lint-py:
+	@"$(RUFF)" check src/ scripts/
+
+lint-sql:
+	@"$(SQLFLUFF)" lint sdpipe_transforms/models/ sdpipe_transforms/tests/
+
+lint: lint-py lint-sql
+
+fmt-py:
+	@"$(RUFF)" check --fix src/ scripts/
+	@"$(RUFF)" format src/ scripts/
+
+fmt-sql:
+	@"$(SQLFLUFF)" fix sdpipe_transforms/models/ sdpipe_transforms/tests/
+
+fmt: fmt-py fmt-sql

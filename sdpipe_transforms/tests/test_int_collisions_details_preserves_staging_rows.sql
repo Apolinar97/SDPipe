@@ -5,12 +5,13 @@ WITH staging AS (
         {{ dbt_utils.generate_surrogate_key(['report_id', 'source_row_num']) }} AS collision_detail_id
     FROM {{ ref('stg_collisions_details') }}
 ),
+
 intermediate AS (
     SELECT collision_detail_id
     FROM {{ ref('int_collisions_details') }}
 )
-SELECT
-    s.collision_detail_id
-FROM staging s
-LEFT JOIN intermediate i ON s.collision_detail_id = i.collision_detail_id
+
+SELECT s.collision_detail_id
+FROM staging AS s
+LEFT JOIN intermediate AS i ON s.collision_detail_id = i.collision_detail_id
 WHERE i.collision_detail_id IS NULL

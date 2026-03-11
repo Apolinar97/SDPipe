@@ -41,6 +41,6 @@ SELECT
     b.has_injuries,
     b.is_hit_and_run,
     b.is_intersection_collision
-FROM basic b
-LEFT JOIN participant_counts pc
+FROM basic AS b
+LEFT JOIN participant_counts AS pc
     ON b.report_id = pc.report_id

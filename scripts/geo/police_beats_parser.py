@@ -8,11 +8,13 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from pipeline.logging_config import configure_logging as configure_pipeline_logging, get_logger
 from geopy.distance import geodesic
 from shapely.geometry import Point, shape
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
+
+from pipeline.logging_config import configure_logging as configure_pipeline_logging
+from pipeline.logging_config import get_logger
 
 logger = get_logger(__name__)
 

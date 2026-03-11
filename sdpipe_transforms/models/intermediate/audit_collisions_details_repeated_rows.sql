@@ -10,8 +10,8 @@ WITH current_staging_ids AS (
 
 current_details AS (
     SELECT i.*
-    FROM {{ ref('int_collisions_details') }} i
-    INNER JOIN current_staging_ids s
+    FROM {{ ref('int_collisions_details') }} AS i
+    INNER JOIN current_staging_ids AS s
         ON i.collision_detail_id = s.collision_detail_id
 ),
 
@@ -37,6 +37,7 @@ grouped AS (
         report_id,
         collision_detail_fingerprint
 )
+
 SELECT
     report_id,
     collision_detail_fingerprint,

@@ -7,11 +7,11 @@ WITH stale_details AS (
         i.snapshot_dt,
         i.source_file,
         i.load_ts
-    FROM {{ ref('int_collisions_details') }} i
+    FROM {{ ref('int_collisions_details') }} AS i
     LEFT JOIN (
         SELECT {{ dbt_utils.generate_surrogate_key(['report_id', 'source_row_num']) }} AS collision_detail_id
         FROM {{ ref('stg_collisions_details') }}
-    ) s ON i.collision_detail_id = s.collision_detail_id
+    ) AS s ON i.collision_detail_id = s.collision_detail_id
     WHERE s.collision_detail_id IS NULL
 ),
 
@@ -21,16 +21,16 @@ stale_basic AS (
         i.snapshot_dt,
         i.source_file,
         i.load_ts
-    FROM {{ ref('int_collisions_basic') }} i
+    FROM {{ ref('int_collisions_basic') }} AS i
     LEFT JOIN (
         SELECT DISTINCT report_id
         FROM {{ ref('stg_collisions_basic') }}
-    ) s ON i.report_id = s.report_id
+    ) AS s ON i.report_id = s.report_id
     WHERE s.report_id IS NULL
 )
 
 SELECT
-    'collisions_details' AS model,
+    'collisions_details' AS model_name,
     collision_detail_id AS record_id,
     report_id,
     snapshot_dt,
@@ -41,7 +41,7 @@ FROM stale_details
 UNION ALL
 
 SELECT
-    'collisions_basic' AS model,
+    'collisions_basic' AS model_name,
     report_id AS record_id,
     report_id,
     snapshot_dt,
