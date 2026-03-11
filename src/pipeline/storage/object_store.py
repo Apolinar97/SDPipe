@@ -1,16 +1,16 @@
-from datetime import datetime, date
+from datetime import date, datetime
 
 import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
+
 from pipeline.config.object_store_config import ObjectStoreConfig
 from pipeline.logging_config import get_logger
-
 
 logger = get_logger(__name__)
 
 class ObjectStore:
-    def __init__(self, config: ObjectStoreConfig):      
+    def __init__(self, config: ObjectStoreConfig):
         self.endpoint = config.endpoint
         self.access_key = config.access_key
         self.secret_key = config.secret_key
@@ -36,10 +36,10 @@ class ObjectStore:
             response = self.client.list_objects_v2(Bucket=self._bucket(bucket_name), Prefix=prefix)
             contents = response.get("Contents", [])
             return [obj["Key"] for obj in contents]
-        except ClientError as e:
+        except ClientError:
             logger.exception("Failed to list objects: prefix=%s bucket=%s", prefix, self._bucket(bucket_name))
             return []
-    
+
     def download_object(self, key: str, destination: str, bucket_name: str | None = None):
         try:
             self.client.download_file(self._bucket(bucket_name), key, destination)
@@ -51,7 +51,7 @@ class ObjectStore:
             self.client.upload_file(source, self._bucket(bucket_name), key)
         except ClientError as e:
             raise RuntimeError(f"Error uploading file '{source}' to '{key}': {e}") from e
-    
+
     def put_object(self, key: str, data: bytes, content_type: str = "application/json",
                    metadata: dict[str, str] | None = None, bucket_name: str | None = None):
         try:
@@ -77,7 +77,7 @@ class ObjectStore:
             if code in {"404", "NoSuchKey", "NotFound"}:
                 return None
             raise
-    
+
 
     def object_exists(self, key: str, bucket_name: str | None = None) -> bool:
         try:
@@ -104,14 +104,14 @@ class ObjectStore:
             if code in {"404", "NoSuchKey", "NotFound"}:
                 raise RuntimeError(f"Object not found in bucket {bucket!r}: {key!r}") from e
             raise
-    
+
     def list_files_prefix(self, prefix: str= "", bucket_name:str | None = None) -> list[str]:
         #List all common prefixes(folders) under the given prefix
         try:
             response = self.client.list_objects_v2(Bucket=self._bucket(bucket_name), Prefix=prefix, Delimiter="/")
             prefixes = response.get("CommonPrefixes", [])
             return [p["Prefix"] for p in prefixes]
-        except ClientError as e:
+        except ClientError:
             logger.exception("Failed to list object prefixes: prefix=%s bucket=%s", prefix, self._bucket(bucket_name))
             return []
     def get_latest_object_key(self, prefix: str = "", bucket_name: str | None = None) -> date | None:
@@ -122,8 +122,7 @@ class ObjectStore:
             latest_folder = max(folders)
             date_str = latest_folder.rstrip("/").split("/")[-1]
             return datetime.strptime(date_str, "%Y-%m-%d").date()
-            
-        except (ClientError, ValueError) as e:
+
+        except (ClientError, ValueError):
             logger.exception("Failed to get latest object key: prefix=%s bucket=%s", prefix, self._bucket(bucket_name))
             return None
-            

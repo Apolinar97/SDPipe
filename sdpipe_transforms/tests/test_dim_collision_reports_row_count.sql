@@ -7,5 +7,5 @@ FROM (
     SELECT
         (SELECT count(*) FROM {{ ref('int_collisions_basic') }}) AS basic_count,
         (SELECT count(*) FROM {{ ref('dim_collision_reports') }}) AS reports_count
-) counts
+) AS counts
 WHERE reports_count < basic_count

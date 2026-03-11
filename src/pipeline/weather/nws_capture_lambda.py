@@ -1,14 +1,17 @@
 from __future__ import annotations
+
 import json
-from pathlib import Path
 import os
 import time
 from datetime import datetime, timezone
-import requests
+from pathlib import Path
 from typing import Any
-from pipeline.storage.object_store import ObjectStore
+
+import requests
+
 from pipeline.config.object_store_config import ObjectStoreConfig
 from pipeline.logging_config import configure_logging, get_logger
+from pipeline.storage.object_store import ObjectStore
 from pipeline.weather.models import BeatStationMapping
 from pipeline.weather.nws_api_fetcher import create_nws_session, fetch_latest_observation_json
 
@@ -49,7 +52,7 @@ def load_base_stations_mapping_file(object_store: ObjectStore, mapping_file_key:
 def build_beat_station_mapping(mapping_file_path:Path)-> list[BeatStationMapping]:
     if not mapping_file_path.exists():
         raise FileNotFoundError(f"Mapping file not found at '{mapping_file_path}'")
-    
+
     raw_data = json.loads(mapping_file_path.read_text())
     validated_data = [BeatStationMapping.model_validate(row) for row in raw_data]
     return validated_data
@@ -70,7 +73,7 @@ def build_observation_batch(
         "source": DATA_SOURCE,
         "schema_version": SCHEMA_VERSION,
         "observations": observations
-        
+
     }
 
 def collect_station_observation_json(unique_station_set: set[str]) -> tuple[list[dict[str, Any]], set[str]]:
@@ -92,7 +95,7 @@ def collect_station_observation_json(unique_station_set: set[str]) -> tuple[list
     elapsed_seconds = time.perf_counter() - started_at
 
     logger.info(
-        "NWS raw json collection complete: total_stations=%s successful_observations=%s failed_stations=%s elapsed_seconds=%.3f",
+        "NWS raw json collection complete: total=%s success=%s failed=%s elapsed=%.3fs",
         len(unique_station_set),
         len(nws_observation_json),
         len(failed_stations),
@@ -128,9 +131,12 @@ def lambda_handler(event, context):
         )
         json_bytes = json.dumps(s3_payload,default=str).encode('utf-8')
         object_store.put_object(s3_file_key,json_bytes)
-        logger.info(f'Uploaded NWS Observation batch: key:{s3_file_key}, Observations: {nws_observations_json}, failed: {len(failed_stations)}')
+        logger.info(
+            "Uploaded NWS Observation batch: key=%s observations=%s failed=%s",
+            s3_file_key, len(nws_observations_json), len(failed_stations),
+        )
     except Exception:
-        logger.exception(f"Unhandled error in nws_capture_lambda")
+        logger.exception("Unhandled error in nws_capture_lambda")
         raise
 if __name__ == "__main__":
     lambda_handler({}, None)

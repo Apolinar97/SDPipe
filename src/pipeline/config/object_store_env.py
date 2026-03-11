@@ -1,5 +1,7 @@
-from pipeline.config.object_store_config import ObjectStoreConfig
 import os
+
+from pipeline.config.object_store_config import ObjectStoreConfig
+
 
 def require_env(var_name):
     value = os.getenv(var_name)

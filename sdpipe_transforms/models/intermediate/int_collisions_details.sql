@@ -1,10 +1,10 @@
 {{ config(unique_key='collision_detail_id') }}
 
 WITH base AS (
-    SELECT
-        *
+    SELECT *
     FROM {{ ref('stg_collisions_details') }}
 )
+
 SELECT
     {{ dbt_utils.generate_surrogate_key([
         'report_id',

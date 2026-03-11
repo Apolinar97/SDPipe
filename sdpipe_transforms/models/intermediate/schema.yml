@@ -32,7 +32,7 @@ models:
       - name: record_id
         tests:
           - not_null
-      - name: model
+      - name: model_name
         tests:
           - not_null
           - accepted_values:

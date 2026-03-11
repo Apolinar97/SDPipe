@@ -27,7 +27,8 @@ SELECT
     ]) }} AS person_key,
     fc.duplicate_group_size > 1 AS is_duplicate_participant,
     fc.duplicate_group_size
-FROM details d
-INNER JOIN fingerprint_counts fc
-    ON d.report_id = fc.report_id
-    AND d.collision_detail_fingerprint = fc.collision_detail_fingerprint
+FROM details AS d
+INNER JOIN fingerprint_counts AS fc
+    ON
+        d.report_id = fc.report_id
+        AND d.collision_detail_fingerprint = fc.collision_detail_fingerprint

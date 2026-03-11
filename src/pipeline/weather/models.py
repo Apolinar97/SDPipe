@@ -1,18 +1,21 @@
 from __future__ import annotations
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Optional, Any
+
 from datetime import datetime
+from typing import Any, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+
 
 # The main observation model that captures the properties of a weather observation.
 class QuantifiedValue(BaseModel):
     model_config = ConfigDict(extra='ignore', populate_by_name=True)
-    unit_code: Optional[str] = Field(None, alias="unitCode", description="The unit of measurement for the temperature value.")
-    value: Optional[float] = Field(None, description="The temperature value.")
-    quality_control: Optional[str] = Field(None, alias="qualityControl", description="Quality control flag for the temperature value.")
+    unit_code: Optional[str] = Field(None, alias="unitCode", description="Unit of measurement.")
+    value: Optional[float] = Field(None, description="The measured value.")
+    quality_control: Optional[str] = Field(None, alias="qualityControl", description="Quality control flag.")
 
 class Elevation(BaseModel):
     model_config = ConfigDict(extra='ignore', populate_by_name=True)
-    unit_code: Optional[str] = Field(None, alias="unitCode", description="The unit of measurement for the elevation value.")
+    unit_code: Optional[str] = Field(None, alias="unitCode", description="Unit of measurement.")
     value: Optional[float] = Field(None, description="The elevation value.")
 
 class Geometry(BaseModel):
@@ -32,18 +35,32 @@ class ObservationProperties(BaseModel):
     station_name: str = Field(..., alias="stationName", description="The name of the weather station.")
     timestamp: datetime = Field(..., description="The timestamp of the observation.")
     elevation: Optional[Elevation] = Field(None, description="The elevation information for the station.")
-    text_description: Optional[str] = Field(None, alias="textDescription", description="A textual description of the weather conditions.")
-    icon: Optional[str] = Field(None, description="A URL to an icon representing the weather conditions.")
-    present_weather: list[Any] = Field(default_factory=list, alias="presentWeather", description="A list of present weather conditions.")
-    temperature: Optional[QuantifiedValue] = Field(None, description="The temperature observation.")
-    wind_direction: Optional[QuantifiedValue] = Field(None, alias="windDirection", description="The wind direction observation.")
-    wind_speed: Optional[QuantifiedValue] = Field(None, alias="windSpeed", description="The wind speed observation.")
-    wind_gust: Optional[QuantifiedValue] = Field(None, alias="windGust", description="The wind gust observation.")
-    visibility: Optional[QuantifiedValue] = Field(None, description="The visibility observation.")
-    precipitation_last_hour: Optional[QuantifiedValue] = Field(None, alias="precipitationLastHour", description="The precipitation in the last hour observation.")
-    precipitation_last_3_hours: Optional[QuantifiedValue] = Field(None, alias="precipitationLast3Hours", description="The precipitation in the last 3 hours observation.")
-    precipitation_last_6_hours: Optional[QuantifiedValue] = Field(None, alias="precipitationLast6Hours", description="The precipitation in the last 6 hours observation.")
-    cloud_layers: Optional[list[CloudLayer]] = Field(None, alias="cloudLayers", description="A list of cloud layers observed.")
+    text_description: Optional[str] = Field(
+        None, alias="textDescription", description="Textual description of weather conditions.",
+    )
+    icon: Optional[str] = Field(None, description="URL to an icon representing weather conditions.")
+    present_weather: list[Any] = Field(
+        default_factory=list, alias="presentWeather", description="Present weather conditions.",
+    )
+    temperature: Optional[QuantifiedValue] = Field(None, description="Temperature observation.")
+    wind_direction: Optional[QuantifiedValue] = Field(
+        None, alias="windDirection", description="Wind direction observation.",
+    )
+    wind_speed: Optional[QuantifiedValue] = Field(None, alias="windSpeed", description="Wind speed observation.")
+    wind_gust: Optional[QuantifiedValue] = Field(None, alias="windGust", description="Wind gust observation.")
+    visibility: Optional[QuantifiedValue] = Field(None, description="Visibility observation.")
+    precipitation_last_hour: Optional[QuantifiedValue] = Field(
+        None, alias="precipitationLastHour", description="Precipitation in the last hour.",
+    )
+    precipitation_last_3_hours: Optional[QuantifiedValue] = Field(
+        None, alias="precipitationLast3Hours", description="Precipitation in the last 3 hours.",
+    )
+    precipitation_last_6_hours: Optional[QuantifiedValue] = Field(
+        None, alias="precipitationLast6Hours", description="Precipitation in the last 6 hours.",
+    )
+    cloud_layers: Optional[list[CloudLayer]] = Field(
+        None, alias="cloudLayers", description="Cloud layers observed.",
+    )
 
 class NwsStationObservation(BaseModel):
     model_config = ConfigDict(extra='ignore', populate_by_name=True)

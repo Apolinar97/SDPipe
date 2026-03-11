@@ -7,7 +7,6 @@ import sys
 from datetime import datetime, timezone
 from typing import Any
 
-
 _RESERVED_RECORD_FIELDS = set(logging.makeLogRecord({}).__dict__.keys())
 
 
