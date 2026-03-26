@@ -14,11 +14,13 @@ participant_counts AS (
 
 SELECT
     b.report_id,
+    CAST(TO_CHAR(b.report_date, 'YYYYMMDD') AS INTEGER) AS date_key,
     {{ dbt_utils.generate_surrogate_key([
         'b.violation_section',
         'b.violation_type',
         'b.primary_violation_description'
     ]) }} AS violation_key,
+    {{ dbt_utils.generate_surrogate_key(['b.police_beat']) }} AS beat_key,
     b.report_date,
     b.report_datetime,
     b.report_hour,

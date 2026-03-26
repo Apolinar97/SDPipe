@@ -17,6 +17,7 @@ SELECT
     d.collision_detail_id,
     d.report_id,
     CAST(TO_CHAR(d.report_date, 'YYYYMMDD') AS INTEGER) AS date_key,
+    {{ dbt_utils.generate_surrogate_key(['d.police_beat']) }} AS beat_key,
     {{ dbt_utils.generate_surrogate_key([
         'd.person_role',
         'd.person_injury_level',

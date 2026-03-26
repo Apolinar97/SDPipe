@@ -28,3 +28,18 @@ models:
         description: 'CSV line number for the participant row, starting at 2 for the first data row'
         tests:
           - not_null
+  - name: stg_collisions_beats
+    description: 'Standardized SDPD police beat reference data'
+    columns:
+      - name: beat
+        description: 'Police beat identifier'
+        tests:
+          - not_null
+      - name: division
+        description: 'Police division the beat belongs to'
+        tests:
+          - not_null
+      - name: service_area
+        description: 'Service area the beat belongs to'
+        tests:
+          - not_null

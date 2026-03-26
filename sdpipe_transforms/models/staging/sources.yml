@@ -12,3 +12,5 @@ sources:
         description: "Raw collision records loaded from SDPD CSV"
       - name: collisions_details
         description: "Raw collision details records loaded from SDPD CSV"
+      - name: collisions_beats
+        description: "Raw SDPD police beat reference data loaded from CSV"

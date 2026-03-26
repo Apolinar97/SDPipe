@@ -31,14 +31,35 @@ models:
           - unique
           - not_null
 
-  - name: dim_collision_reports
-    description: One row per collision report; collision-level context and measures for the star schema
+  - name: dim_beat
+    description: Police beat dimension from SDPD reference data; includes fallback rows for orphan and unspecified beats
+    columns:
+      - name: beat_key
+        description: Surrogate key over (beat)
+        tests:
+          - unique
+          - not_null
+      - name: beat
+        description: Police beat integer code
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_collisions
+    description: Fact table at collision grain — one row per collision report; owns injured/killed, date, beat, and violation context
     columns:
       - name: report_id
         description: Natural key from SDPD source data, unique per collision report
         tests:
           - unique
           - not_null
+      - name: date_key
+        description: FK to dim_date (YYYYMMDD integer derived from report_date)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
       - name: violation_key
         description: FK to dim_violation (surrogate over violation_section, violation_type, primary_violation_description)
         tests:
@@ -46,6 +67,13 @@ models:
           - relationships:
               to: ref('dim_violation')
               field: violation_key
+      - name: beat_key
+        description: FK to dim_beat (surrogate over police_beat)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_beat')
+              field: beat_key
 
   - name: fct_collision_participants
     description: Fact table at participant grain — one row per person involved in a collision
@@ -56,11 +84,11 @@ models:
           - unique
           - not_null
       - name: report_id
-        description: FK to dim_collision_reports
+        description: FK to fct_collisions
         tests:
           - not_null
           - relationships:
-              to: ref('dim_collision_reports')
+              to: ref('fct_collisions')
               field: report_id
       - name: date_key
         description: FK to dim_date (YYYYMMDD integer derived from report_date)
@@ -69,6 +97,13 @@ models:
           - relationships:
               to: ref('dim_date')
               field: date_key
+      - name: beat_key
+        description: FK to dim_beat (surrogate over police_beat)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_beat')
+              field: beat_key
       - name: person_key
         description: FK to dim_person
         tests:
