@@ -1,4 +1,4 @@
-{{ config(unique_key='violation_key') }}
+{{ config(materialized='table', unique_key='violation_key') }}
 
 WITH distinct_violations AS (
     SELECT DISTINCT

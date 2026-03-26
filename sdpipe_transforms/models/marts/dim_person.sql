@@ -1,4 +1,4 @@
-{{ config(unique_key='person_key') }}
+{{ config(materialized='table', unique_key='person_key') }}
 
 WITH distinct_persons AS (
     SELECT DISTINCT

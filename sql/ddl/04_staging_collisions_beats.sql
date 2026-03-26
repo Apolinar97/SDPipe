@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS raw.collisions_beats (
     serv TEXT NOT NULL,
     name TEXT NULL,
     snapshot_dt DATE NOT NULL,
-    source_file TEXT NOT NULL
+    source_file TEXT NOT NULL,
+    load_ts TIMESTAMPTZ NOT NULL DEFAULT now()
 );
