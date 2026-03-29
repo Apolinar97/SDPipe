@@ -63,10 +63,7 @@ def main() -> None:
         except Exception:
             logger.exception("Failed to download: dataset=%s", config.data_set_name)
             failed.append(config.data_set_name)
-    logger.info(
-        "SD data fetch complete: downloaded=%d skipped=%d failed=%d",
-        downloaded, skipped, len(failed)
-    )
+    logger.info("SD data fetch complete: downloaded=%d skipped=%d failed=%d", downloaded, skipped, len(failed))
     if failed:
         raise RuntimeError(f"SD data fetch failed for {len(failed)} file(s): {failed}")
 

@@ -46,10 +46,18 @@ fallback_beats AS (
 ),
 
 all_beats AS (
-    SELECT beat, division, service_area, neighborhood_name
+    SELECT
+        beat,
+        division,
+        service_area,
+        neighborhood_name
     FROM reference_beats
     UNION ALL
-    SELECT beat, division, service_area, neighborhood_name
+    SELECT
+        beat,
+        division,
+        service_area,
+        neighborhood_name
     FROM fallback_beats
 )
 

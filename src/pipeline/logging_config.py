@@ -55,10 +55,7 @@ class TextFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S%z")
-        message = (
-            f"{timestamp} {record.levelname} {record.name} service={self.service} "
-            f"message={record.getMessage()}"
-        )
+        message = f"{timestamp} {record.levelname} {record.name} service={self.service} message={record.getMessage()}"
 
         extras = _extract_extra_fields(record)
         if extras:

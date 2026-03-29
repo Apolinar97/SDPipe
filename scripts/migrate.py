@@ -25,6 +25,7 @@ def get_sql_files():
             files.extend(sorted(directory.glob("*.sql")))
     return files
 
+
 def execute_sql_file(conn: psycopg.Connection, path: Path):
     sql = path.read_text(encoding="utf-8")
     if not sql.strip():
@@ -39,6 +40,7 @@ def execute_sql_file(conn: psycopg.Connection, path: Path):
             conn.rollback()
             logger.exception("Error executing SQL file: path=%s", path)
             return False
+
 
 def main():
     configure_logging(service="scripts.migrate")
@@ -57,5 +59,7 @@ def main():
         failed_paths = ", ".join(str(path.relative_to(PROJECT_ROOT)) for path in failed_files)
         raise RuntimeError(f"Migration failed for: {failed_paths}")
     logger.info("All SQL files executed.")
+
+
 if __name__ == "__main__":
     main()
