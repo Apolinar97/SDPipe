@@ -9,6 +9,7 @@ def require_env(var_name):
         raise ValueError(f"Environment variable '{var_name}' is required but not set.")
     return value
 
+
 def get_object_store_config(bucket_name_env: str) -> ObjectStoreConfig:
     s3_end_point = os.getenv("AWS_S3_ENDPOINT") or None
     s3_access_key = os.getenv("AWS_S3_ACCESS_KEY") or None

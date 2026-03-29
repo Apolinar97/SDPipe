@@ -11,6 +11,7 @@ from pipeline.storage.object_store import ObjectStore
 
 logger = get_logger(__name__)
 
+
 def _get_batch_size() -> int:
     raw = os.getenv("STAGING_BATCH_SIZE", "2000")
     try:
@@ -21,6 +22,7 @@ def _get_batch_size() -> int:
         raise RuntimeError(f"STAGING_BATCH_SIZE must be > 0, got: {batch_size}")
     return batch_size
 
+
 def _get_run_date() -> date:
     raw = os.getenv("STAGING_RUN_DATE")
     if not raw:
@@ -29,6 +31,7 @@ def _get_run_date() -> date:
         return date.fromisoformat(raw)
     except ValueError as exc:
         raise RuntimeError(f"STAGING_RUN_DATE must be in YYYY-MM-DD format, got: {raw!r}") from exc
+
 
 def _resolve_source_key(config: StagingDataConfig, run_date: date, store: ObjectStore) -> str:
     source_root = os.getenv("STAGING_SOURCE_ROOT", "").rstrip("/")
@@ -40,6 +43,7 @@ def _resolve_source_key(config: StagingDataConfig, run_date: date, store: Object
             f"Source file not found for dataset {config.name!r}: bucket={store.bucket_name!r} key={key!r}"
         )
     return key
+
 
 def _validate_header(config: StagingDataConfig, fieldnames: list[str] | None) -> None:
     if not fieldnames:
@@ -61,6 +65,7 @@ def _validate_header(config: StagingDataConfig, fieldnames: list[str] | None) ->
     # TODO: Add a non-strict mode to ignore unexpected columns when upstream adds extra fields.
     if unexpected_columns:
         raise RuntimeError(f"Dataset {config.name} has unexpected columns: {unexpected_columns}")
+
 
 def _normalize_row(
     config: StagingDataConfig, row: dict[str, str | None], snapshot_dt: date, source_file: str, row_num: int
@@ -93,14 +98,13 @@ def _normalize_row(
         row_values.append(row_num)
     return tuple(row_values)
 
+
 def _build_insert_sql(config: StagingDataConfig) -> str:
     db_columns = [config.column_renames.get(col, col) for col in config.columns]
     insert_columns = db_columns + ["snapshot_dt", "source_file"] + list(config.generated_columns)
     placeholders = ", ".join(["%s"] * len(insert_columns))
-    return (
-        f"INSERT INTO {config.table_name} "
-        f"({', '.join(insert_columns)}) VALUES ({placeholders})"
-    )
+    return f"INSERT INTO {config.table_name} ({', '.join(insert_columns)}) VALUES ({placeholders})"
+
 
 def _flush_batch(cur, sql: str, batch: list[tuple[object, ...]]) -> int:
     if not batch:
@@ -110,11 +114,13 @@ def _flush_batch(cur, sql: str, batch: list[tuple[object, ...]]) -> int:
     batch.clear()
     return flushed
 
+
 def _truncate_table(cur, table_name: str) -> int:
     cur.execute(f"SELECT COUNT(*) FROM {table_name}")
     existing_rows = cur.fetchone()[0]
     cur.execute(f"TRUNCATE TABLE {table_name}")
     return existing_rows
+
 
 def _delete_by_snapshot(cur, table_name: str, snapshot_dt: date) -> int:
     cur.execute(
@@ -122,6 +128,7 @@ def _delete_by_snapshot(cur, table_name: str, snapshot_dt: date) -> int:
         {"snapshot_dt": snapshot_dt},
     )
     return cur.rowcount
+
 
 def _preflight_resolve_sources(run_date: date, store: ObjectStore) -> dict[str, str]:
     resolved_keys: dict[str, str] = {}
@@ -135,9 +142,7 @@ def _preflight_resolve_sources(run_date: date, store: ObjectStore) -> dict[str, 
             skipped.append(config.name)
 
     if not resolved_keys:
-        raise RuntimeError(
-            f"Preflight failed: no source files available for run_date={run_date.isoformat()}"
-        )
+        raise RuntimeError(f"Preflight failed: no source files available for run_date={run_date.isoformat()}")
 
     logger.info(
         "Preflight complete: run_date=%s available=%d skipped=%d skipped_datasets=%s",
@@ -148,6 +153,7 @@ def _preflight_resolve_sources(run_date: date, store: ObjectStore) -> dict[str, 
     )
     return resolved_keys
 
+
 def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectStore, key: str) -> int:
     try:
         snapshot_dt = run_date
@@ -157,7 +163,10 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectS
 
         logger.info(
             "Starting dataset load: dataset=%s table=%s key=%s source_file=%s",
-            config.name, config.table_name, key, source_file,
+            config.name,
+            config.table_name,
+            key,
+            source_file,
         )
 
         stream = store.get_object_stream(key)
@@ -168,19 +177,28 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectS
             removed_rows = _truncate_table(cur, config.table_name)
             logger.info(
                 "Truncated table before load: dataset=%s table=%s truncated_rows=%s",
-                config.name, config.table_name, removed_rows,
+                config.name,
+                config.table_name,
+                removed_rows,
             )
         else:
             removed_rows = _delete_by_snapshot(cur, config.table_name, snapshot_dt)
             logger.info(
                 "Deleted existing rows for snapshot: dataset=%s table=%s snapshot_dt=%s deleted_rows=%s",
-                config.name, config.table_name, snapshot_dt, removed_rows,
+                config.name,
+                config.table_name,
+                snapshot_dt,
+                removed_rows,
             )
         insert_sql = _build_insert_sql(config)
         batch: list[tuple[object, ...]] = []
         for row_num, row in enumerate(reader, start=2):
             normalized_row = _normalize_row(
-                config=config, row=row, snapshot_dt=snapshot_dt, source_file=source_file, row_num=row_num,
+                config=config,
+                row=row,
+                snapshot_dt=snapshot_dt,
+                source_file=source_file,
+                row_num=row_num,
             )
             batch.append(normalized_row)
             if len(batch) >= batch_size:
@@ -189,12 +207,16 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectS
         inserted_rows += _flush_batch(cur, insert_sql, batch)
         logger.info(
             "Completed dataset load: dataset=%s table=%s inserted_rows=%s source_file=%s",
-            config.name, config.table_name, inserted_rows, source_file,
+            config.name,
+            config.table_name,
+            inserted_rows,
+            source_file,
         )
         return inserted_rows
     except Exception:
         logger.exception("Dataset load failed: dataset=%s table=%s", config.name, config.table_name)
         raise
+
 
 def main() -> None:
     configure_logging(level=os.getenv("LOG_LEVEL", "INFO"), service="pipeline.staging")
@@ -203,7 +225,9 @@ def main() -> None:
     total_inserted_rows = 0
     logger.info(
         "Starting staging load: run_date=%s datasets=%s bucket=%s",
-        run_date.isoformat(), len(STAGING_DATASETS), store.bucket_name,
+        run_date.isoformat(),
+        len(STAGING_DATASETS),
+        store.bucket_name,
     )
     try:
         resolved_keys = _preflight_resolve_sources(run_date, store)
@@ -218,6 +242,7 @@ def main() -> None:
     except Exception:
         logger.exception("Staging load failed and rolled back: run_date=%s", run_date.isoformat())
         raise
+
 
 if __name__ == "__main__":
     main()

@@ -9,6 +9,7 @@ from pipeline.logging_config import get_logger
 
 logger = get_logger(__name__)
 
+
 class ObjectStore:
     def __init__(self, config: ObjectStoreConfig):
         self.endpoint = config.endpoint
@@ -52,8 +53,14 @@ class ObjectStore:
         except ClientError as e:
             raise RuntimeError(f"Error uploading file '{source}' to '{key}': {e}") from e
 
-    def put_object(self, key: str, data: bytes, content_type: str = "application/json",
-                   metadata: dict[str, str] | None = None, bucket_name: str | None = None):
+    def put_object(
+        self,
+        key: str,
+        data: bytes,
+        content_type: str = "application/json",
+        metadata: dict[str, str] | None = None,
+        bucket_name: str | None = None,
+    ):
         try:
             kwargs = {
                 "Bucket": self._bucket(bucket_name),
@@ -65,7 +72,7 @@ class ObjectStore:
                 kwargs["Metadata"] = metadata
             self.client.put_object(**kwargs)
         except ClientError as e:
-            raise RuntimeError(f'Error putting object {key} to bucket {bucket_name} ') from e
+            raise RuntimeError(f"Error putting object {key} to bucket {bucket_name} ") from e
 
     def get_object_metadata(self, key: str, bucket_name: str | None = None) -> dict[str, str] | None:
         """Return S3 user metadata for the given key, or None if the object does not exist."""
@@ -77,7 +84,6 @@ class ObjectStore:
             if code in {"404", "NoSuchKey", "NotFound"}:
                 return None
             raise
-
 
     def object_exists(self, key: str, bucket_name: str | None = None) -> bool:
         try:
@@ -105,8 +111,8 @@ class ObjectStore:
                 raise RuntimeError(f"Object not found in bucket {bucket!r}: {key!r}") from e
             raise
 
-    def list_files_prefix(self, prefix: str= "", bucket_name:str | None = None) -> list[str]:
-        #List all common prefixes(folders) under the given prefix
+    def list_files_prefix(self, prefix: str = "", bucket_name: str | None = None) -> list[str]:
+        # List all common prefixes(folders) under the given prefix
         try:
             response = self.client.list_objects_v2(Bucket=self._bucket(bucket_name), Prefix=prefix, Delimiter="/")
             prefixes = response.get("CommonPrefixes", [])
@@ -114,6 +120,7 @@ class ObjectStore:
         except ClientError:
             logger.exception("Failed to list object prefixes: prefix=%s bucket=%s", prefix, self._bucket(bucket_name))
             return []
+
     def get_latest_object_key(self, prefix: str = "", bucket_name: str | None = None) -> date | None:
         try:
             folders = self.list_files_prefix(prefix.rstrip("/") + "/", bucket_name)

@@ -76,9 +76,7 @@ WEATHER_STATIONS: list[dict[str, Any]] = [
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Map SDPD beats to nearest weather stations."
-    )
+    parser = argparse.ArgumentParser(description="Map SDPD beats to nearest weather stations.")
     parser.add_argument(
         "--input",
         type=Path,
@@ -95,10 +93,7 @@ def parse_args() -> argparse.Namespace:
         "--strict",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help=(
-            "Fail on source metadata conflicts inside duplicated beats "
-            "(default: --strict)."
-        ),
+        help=("Fail on source metadata conflicts inside duplicated beats (default: --strict)."),
     )
     parser.add_argument(
         "--log-level",
@@ -155,14 +150,10 @@ def extract_beats(geojson_data: dict[str, Any]) -> list[dict[str, Any]]:
         required_props = ("objectid", "beat", "div", "serv")
         missing_props = [k for k in required_props if k not in properties]
         if missing_props:
-            raise RuntimeError(
-                f"Feature index {i} missing required properties: {missing_props}"
-            )
+            raise RuntimeError(f"Feature index {i} missing required properties: {missing_props}")
         geometry_type = geometry.get("type")
         if geometry_type not in ("Polygon", "MultiPolygon"):
-            raise RuntimeError(
-                f"Feature index {i} has unsupported geometry type: {geometry_type!r}"
-            )
+            raise RuntimeError(f"Feature index {i} has unsupported geometry type: {geometry_type!r}")
         if "coordinates" not in geometry:
             raise RuntimeError(f"Feature index {i} missing geometry coordinates.")
 
@@ -181,9 +172,7 @@ def extract_beats(geojson_data: dict[str, Any]) -> list[dict[str, Any]]:
     return beats
 
 
-def _single_value_or_raise(
-    field_name: str, beat_id: int, values: set[Any], strict: bool
-) -> Any:
+def _single_value_or_raise(field_name: str, beat_id: int, values: set[Any], strict: bool) -> Any:
     if len(values) == 1:
         return next(iter(values))
     message = f"Beat {beat_id} has conflicting {field_name} values: {sorted(values)!r}"
@@ -198,19 +187,13 @@ def _merge_beat_geometry(beat_id: int, geometries: list[BaseGeometry]) -> BaseGe
     merged = unary_union(geometries)
 
     if merged.geom_type == "GeometryCollection":
-        polygon_parts = [
-            geom for geom in merged.geoms if geom.geom_type in ("Polygon", "MultiPolygon")
-        ]
+        polygon_parts = [geom for geom in merged.geoms if geom.geom_type in ("Polygon", "MultiPolygon")]
         if not polygon_parts:
-            raise RuntimeError(
-                f"Beat {beat_id} merged into GeometryCollection without polygonal parts."
-            )
+            raise RuntimeError(f"Beat {beat_id} merged into GeometryCollection without polygonal parts.")
         merged = unary_union(polygon_parts)
 
     if merged.geom_type not in ("Polygon", "MultiPolygon"):
-        raise RuntimeError(
-            f"Beat {beat_id} merged to unsupported geometry type: {merged.geom_type}"
-        )
+        raise RuntimeError(f"Beat {beat_id} merged to unsupported geometry type: {merged.geom_type}")
     return merged
 
 
@@ -221,10 +204,7 @@ def consolidate_beats(beats: list[dict[str, Any]], strict: bool) -> list[dict[st
 
     consolidated: list[dict[str, Any]] = []
     for beat_id, group in grouped.items():
-        geometries = [
-            shape({"type": row["geometry_type"], "coordinates": row["coordinates"]})
-            for row in group
-        ]
+        geometries = [shape({"type": row["geometry_type"], "coordinates": row["coordinates"]}) for row in group]
         merged_geom = _merge_beat_geometry(beat_id=beat_id, geometries=geometries)
 
         div = _single_value_or_raise(
@@ -352,9 +332,7 @@ def validate_mapping(mapping: list[dict[str, Any]]) -> None:
 
     source_null_name_total = sum(entry["source_null_name_count"] for entry in mapping)
     source_duplicates = sum(max(entry["source_feature_count"] - 1, 0) for entry in mapping)
-    multipolygon_entries = [
-        entry for entry in mapping if entry["geometry_type"] == "MultiPolygon"
-    ]
+    multipolygon_entries = [entry for entry in mapping if entry["geometry_type"] == "MultiPolygon"]
 
     logger.info("Validation summary:")
     logger.info("  Total beats: %s", len(mapping))
@@ -376,9 +354,7 @@ def main() -> None:
     output_path = args.output.resolve()
 
     logger.info("Loading beat data from: %s", input_path)
-    mapping = build_beat_station_mapping(
-        geojson_path=input_path, stations=WEATHER_STATIONS, strict=args.strict
-    )
+    mapping = build_beat_station_mapping(geojson_path=input_path, stations=WEATHER_STATIONS, strict=args.strict)
     save_mapping(mapping=mapping, output_path=output_path)
     validate_mapping(mapping)
     logger.info("Mapping complete.")

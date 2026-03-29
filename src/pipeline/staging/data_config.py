@@ -16,11 +16,12 @@ class StagingDataConfig:
     column_renames: dict[str, str] = field(default_factory=dict)
     truncate_before_load: bool = True
 
+
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
     table_name="raw.collisions_basic",
     daily_file_name="pd_collisions_datasd.csv",
-    columns = (
+    columns=(
         "report_id",
         "date_time",
         "police_beat",
@@ -44,10 +45,8 @@ COLLISIONS_STAGING_BASIC = StagingDataConfig(
         "police_beat",
         "address_no_primary",
     ),
-    integer_columns=(
-        "police_beat", "injured","killed"
-    ),
-    timestamp_columns=("date_time",)
+    integer_columns=("police_beat", "injured", "killed"),
+    timestamp_columns=("date_time",),
 )
 
 COLLISIONS_STAGING_DETAILS = StagingDataConfig(
@@ -83,9 +82,7 @@ COLLISIONS_STAGING_DETAILS = StagingDataConfig(
         "date_time",
         "police_beat",
     ),
-    integer_columns=(
-        "police_beat", "injured","killed"
-    ),
+    integer_columns=("police_beat", "injured", "killed"),
     timestamp_columns=("date_time",),
     generated_columns=("source_row_num",),
 )
@@ -94,13 +91,7 @@ COLLISIONS_STAGING_BEATS = StagingDataConfig(
     name="staging_collisions_beats",
     table_name="raw.collisions_beats",
     daily_file_name="pd_beats_datasd.csv",
-    columns = (
-        "objectid",
-        "beat",
-        "div",
-        "serv",
-        "name"
-    ),
+    columns=("objectid", "beat", "div", "serv", "name"),
     required_columns=(
         "objectid",
         "beat",
@@ -108,7 +99,7 @@ COLLISIONS_STAGING_BEATS = StagingDataConfig(
         "serv",
     ),
     integer_columns=("beat",),
-    column_renames={"objectid": "object_id"}
+    column_renames={"objectid": "object_id"},
 )
 
 NWS_OBSERVATIONS = StagingDataConfig(

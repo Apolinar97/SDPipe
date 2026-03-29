@@ -7,7 +7,7 @@ WITH latest_per_station AS (
         latitude,
         longitude
     FROM {{ ref('int_nws_observations') }}
-    ORDER BY station_id, observation_timestamp DESC
+    ORDER BY station_id ASC, observation_timestamp DESC
 )
 
 SELECT

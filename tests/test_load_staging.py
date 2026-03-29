@@ -109,10 +109,12 @@ class TestPreflightSkipMissing:
     @patch("pipeline.staging.load_staging.STAGING_DATASETS", _TEST_DATASETS)
     @patch.dict("os.environ", {"STAGING_SOURCE_ROOT": "raw"})
     def test_all_available(self):
-        store = _mock_store({
-            "raw/2026-03-25/a.csv",
-            "raw/2026-03-25/b.csv",
-        })
+        store = _mock_store(
+            {
+                "raw/2026-03-25/a.csv",
+                "raw/2026-03-25/b.csv",
+            }
+        )
         resolved = _preflight_resolve_sources(RUN_DATE, store)
         assert set(resolved.keys()) == {"ds_a", "ds_b"}
 

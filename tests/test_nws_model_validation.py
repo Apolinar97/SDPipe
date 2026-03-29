@@ -306,6 +306,7 @@ SAMPLE_CAPTURED_AT = "2026-03-25T00:05:59.047306+00:00"
 # Tests
 # ---------------------------------------------------------------------------
 
+
 class TestNwsModelValidation:
     """Validate that Pydantic models parse real NWS JSON and flatten correctly."""
 
@@ -400,10 +401,7 @@ class TestNwsModelValidation:
     def test_multi_cloud_layers(self) -> None:
         """Only the first cloud layer is captured; verify multi-layer station."""
         # KNZY has 2 cloud layers: FEW@460m, FEW@7620m
-        knzy_raw = next(
-            r for r in SAMPLE_BATCH_JSON["observations"]
-            if r["properties"]["stationId"] == "KNZY"
-        )
+        knzy_raw = next(r for r in SAMPLE_BATCH_JSON["observations"] if r["properties"]["stationId"] == "KNZY")
         obs = NwsStationObservation.model_validate(knzy_raw)
         assert len(obs.properties.cloud_layers) == 2
 

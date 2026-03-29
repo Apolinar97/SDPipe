@@ -129,9 +129,7 @@ def _parse_date(raw: str | None, env_var: str) -> date | None:
     try:
         return date.fromisoformat(raw)
     except ValueError as exc:
-        raise RuntimeError(
-            f"{env_var} must be in YYYY-MM-DD format, got: {raw!r}"
-        ) from exc
+        raise RuntimeError(f"{env_var} must be in YYYY-MM-DD format, got: {raw!r}") from exc
 
 
 def _get_date_range() -> tuple[date, date]:
@@ -139,9 +137,7 @@ def _get_date_range() -> tuple[date, date]:
     start = _parse_date(os.getenv("NWS_FLATTEN_RUN_DATE"), "NWS_FLATTEN_RUN_DATE") or today
     end = _parse_date(os.getenv("NWS_FLATTEN_END_DATE"), "NWS_FLATTEN_END_DATE") or start
     if end < start:
-        raise RuntimeError(
-            f"NWS_FLATTEN_END_DATE ({end}) must be >= NWS_FLATTEN_RUN_DATE ({start})"
-        )
+        raise RuntimeError(f"NWS_FLATTEN_END_DATE ({end}) must be >= NWS_FLATTEN_RUN_DATE ({start})")
     return start, end
 
 

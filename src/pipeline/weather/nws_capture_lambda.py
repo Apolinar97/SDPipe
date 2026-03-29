@@ -15,13 +15,14 @@ from pipeline.storage.object_store import ObjectStore
 from pipeline.weather.models import BeatStationMapping
 from pipeline.weather.nws_api_fetcher import create_nws_session, fetch_latest_observation_json
 
-TEMP_DIR_ROOT = os.getenv('TEMP_DIR_ROOT', '/tmp')  # Default to /tmp if not set
-TEMP_OBSERVATION_FILE_PREFIX = os.getenv('TEMP_OBSERVATION_FILE_PREFIX','nws_observations')
-DATA_SOURCE = 'https://api.weather.gov'
+TEMP_DIR_ROOT = os.getenv("TEMP_DIR_ROOT", "/tmp")  # Default to /tmp if not set
+TEMP_OBSERVATION_FILE_PREFIX = os.getenv("TEMP_OBSERVATION_FILE_PREFIX", "nws_observations")
+DATA_SOURCE = "https://api.weather.gov"
 SCHEMA_VERSION = 1
 
 object_store: ObjectStore = None
 logger = get_logger(__name__)
+
 
 def require_env(var_name):
     value = os.getenv(var_name)
@@ -29,12 +30,13 @@ def require_env(var_name):
         raise ValueError(f"Environment variable '{var_name}' is required but not set.")
     return value
 
+
 def get_object_store_config() -> ObjectStoreConfig:
-    s3_end_point = os.getenv('AWS_S3_ENDPOINT') or None
-    s3_access_key = os.getenv('AWS_S3_ACCESS_KEY') or None
-    s3_secret_key = os.getenv('AWS_S3_SECRET_KEY') or None
-    s3_region = os.getenv('AWS_REGION') or os.getenv('AWS_DEFAULT_REGION') or None
-    s3_weather_bucket_name = require_env('AWS_S3_WEATHER_BUCKET_NAME')
+    s3_end_point = os.getenv("AWS_S3_ENDPOINT") or None
+    s3_access_key = os.getenv("AWS_S3_ACCESS_KEY") or None
+    s3_secret_key = os.getenv("AWS_S3_SECRET_KEY") or None
+    s3_region = os.getenv("AWS_REGION") or os.getenv("AWS_DEFAULT_REGION") or None
+    s3_weather_bucket_name = require_env("AWS_S3_WEATHER_BUCKET_NAME")
     return ObjectStoreConfig(
         bucket_name=s3_weather_bucket_name,
         endpoint=s3_end_point,
@@ -43,13 +45,15 @@ def get_object_store_config() -> ObjectStoreConfig:
         region=s3_region,
     )
 
+
 def load_base_stations_mapping_file(object_store: ObjectStore, mapping_file_key: str) -> Path:
     local_path = Path(TEMP_DIR_ROOT) / mapping_file_key
     local_path.parent.mkdir(parents=True, exist_ok=True)
     object_store.download_object(mapping_file_key, str(local_path))
     return local_path
 
-def build_beat_station_mapping(mapping_file_path:Path)-> list[BeatStationMapping]:
+
+def build_beat_station_mapping(mapping_file_path: Path) -> list[BeatStationMapping]:
     if not mapping_file_path.exists():
         raise FileNotFoundError(f"Mapping file not found at '{mapping_file_path}'")
 
@@ -57,14 +61,13 @@ def build_beat_station_mapping(mapping_file_path:Path)-> list[BeatStationMapping
     validated_data = [BeatStationMapping.model_validate(row) for row in raw_data]
     return validated_data
 
-def get_unique_station_ids(list_of_bts: list[BeatStationMapping])-> set[str]:
+
+def get_unique_station_ids(list_of_bts: list[BeatStationMapping]) -> set[str]:
     return {bts.station_id for bts in list_of_bts if bts.station_id}
 
+
 def build_observation_batch(
-    captured_at: datetime,
-    observations: list[dict[str, Any]],
-    stations_requested: set[str],
-    failed_stations: set[str]
+    captured_at: datetime, observations: list[dict[str, Any]], stations_requested: set[str], failed_stations: set[str]
 ) -> dict[str, Any]:
     return {
         "captured_at_utc": captured_at.isoformat(),
@@ -72,9 +75,9 @@ def build_observation_batch(
         "stations_failed": sorted(failed_stations),
         "source": DATA_SOURCE,
         "schema_version": SCHEMA_VERSION,
-        "observations": observations
-
+        "observations": observations,
     }
+
 
 def collect_station_observation_json(unique_station_set: set[str]) -> tuple[list[dict[str, Any]], set[str]]:
     nws_observation_json: list[dict[str, Any]] = []
@@ -103,10 +106,11 @@ def collect_station_observation_json(unique_station_set: set[str]) -> tuple[list
     )
     return nws_observation_json, failed_stations
 
-def compute_weather_file_key(utc_time_prefix:datetime) -> str:
-    file_name_prefix = utc_time_prefix.strftime('%Y-%m-%d')
+
+def compute_weather_file_key(utc_time_prefix: datetime) -> str:
+    file_name_prefix = utc_time_prefix.strftime("%Y-%m-%d")
     time_stamp = utc_time_prefix.strftime("%Y-%m-%dT%H-%M-%SZ")
-    return f'{TEMP_OBSERVATION_FILE_PREFIX}/{file_name_prefix}/{time_stamp}.json'
+    return f"{TEMP_OBSERVATION_FILE_PREFIX}/{file_name_prefix}/{time_stamp}.json"
 
 
 def lambda_handler(event, context):
@@ -116,7 +120,7 @@ def lambda_handler(event, context):
         if object_store is None:
             object_store_config = get_object_store_config()
             object_store = ObjectStore(object_store_config)
-        mapping_file_key = require_env('MAPPING_FILE_KEY')
+        mapping_file_key = require_env("MAPPING_FILE_KEY")
         mapping_file_path = load_base_stations_mapping_file(object_store, mapping_file_key)
         beat_to_station = build_beat_station_mapping(mapping_file_path)
         unique_station_set = get_unique_station_ids(beat_to_station)
@@ -124,19 +128,23 @@ def lambda_handler(event, context):
         s3_file_key = compute_weather_file_key(now_utc)
         nws_observations_json, failed_stations = collect_station_observation_json(unique_station_set)
         s3_payload = build_observation_batch(
-            captured_at= now_utc,
+            captured_at=now_utc,
             observations=nws_observations_json,
-            stations_requested= unique_station_set,
-            failed_stations= failed_stations
+            stations_requested=unique_station_set,
+            failed_stations=failed_stations,
         )
-        json_bytes = json.dumps(s3_payload,default=str).encode('utf-8')
-        object_store.put_object(s3_file_key,json_bytes)
+        json_bytes = json.dumps(s3_payload, default=str).encode("utf-8")
+        object_store.put_object(s3_file_key, json_bytes)
         logger.info(
             "Uploaded NWS Observation batch: key=%s observations=%s failed=%s",
-            s3_file_key, len(nws_observations_json), len(failed_stations),
+            s3_file_key,
+            len(nws_observations_json),
+            len(failed_stations),
         )
     except Exception:
         logger.exception("Unhandled error in nws_capture_lambda")
         raise
+
+
 if __name__ == "__main__":
     lambda_handler({}, None)
