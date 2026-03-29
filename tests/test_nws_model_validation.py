@@ -195,7 +195,14 @@ SAMPLE_BATCH_JSON = json.loads(r"""
         "relativeHumidity": {"unitCode": "wmoUnit:percent", "value": 70.170683098134, "qualityControl": "V"},
         "windChill": {"unitCode": "wmoUnit:degC", "value": null, "qualityControl": "V"},
         "heatIndex": {"unitCode": "wmoUnit:degC", "value": null, "qualityControl": "V"},
-        "cloudLayers": [{"base": {"unitCode": "wmoUnit:m", "value": 460}, "amount": "FEW"}, {"base": {"unitCode": "wmoUnit:m", "value": 7620}, "amount": "FEW"}]
+        "cloudLayers": [
+                               {"base": {
+                               "unitCode": "wmoUnit:m",
+                               "value": 460
+                               },
+                                "amount": "FEW"
+                               },
+                                {"base": {"unitCode": "wmoUnit:m", "value": 7620}, "amount": "FEW"}]
       }
     },
     {
