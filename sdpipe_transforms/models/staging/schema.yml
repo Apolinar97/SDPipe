@@ -43,3 +43,31 @@ models:
         description: 'Service area the beat belongs to'
         tests:
           - not_null
+  - name: stg_nws_observations
+    description: 'Standardized NWS weather observations from NOAA'
+    columns:
+      - name: station_id
+        description: 'NOAA station identifier (e.g. KSAN)'
+        tests:
+          - not_null
+      - name: observation_timestamp
+        description: 'UTC timestamp of the weather observation'
+        tests:
+          - not_null
+      - name: observation_date
+        description: 'Date extracted from observation_timestamp'
+        tests:
+          - not_null
+      - name: latitude
+        description: 'Station latitude (WGS84)'
+        tests:
+          - not_null
+      - name: longitude
+        description: 'Station longitude (WGS84)'
+        tests:
+          - not_null
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - station_id
+            - observation_timestamp
