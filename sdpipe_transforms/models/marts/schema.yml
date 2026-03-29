@@ -75,6 +75,43 @@ models:
               to: ref('dim_beat')
               field: beat_key
 
+  - name: dim_weather_station
+    description: NOAA weather station dimension — one row per station; metadata from the most recent observation
+    columns:
+      - name: station_key
+        description: Surrogate key over (station_id)
+        tests:
+          - unique
+          - not_null
+      - name: station_id
+        description: NOAA station identifier (e.g. KSAN)
+        tests:
+          - unique
+          - not_null
+
+  - name: fct_weather_observations
+    description: Fact table at observation grain — one row per station + observation timestamp
+    columns:
+      - name: observation_id
+        description: Surrogate key over (station_id, observation_timestamp)
+        tests:
+          - unique
+          - not_null
+      - name: station_key
+        description: FK to dim_weather_station
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_weather_station')
+              field: station_key
+      - name: date_key
+        description: FK to dim_date (YYYYMMDD integer derived from observation_date)
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+
   - name: fct_collision_participants
     description: Fact table at participant grain — one row per person involved in a collision
     columns:
