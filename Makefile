@@ -15,10 +15,11 @@ PYTHONPATH := $(CURDIR)/src
 DBT_PROJECT_DIR := $(CURDIR)/sdpipe_transforms
 DBT_PROFILES_DIR ?= $(HOME)/.dbt
 RUN_DATE ?= $(if $(strip $(STAGING_RUN_DATE)),$(STAGING_RUN_DATE),$(shell date -u +%F))
+END_DATE ?=
 
 REQUIRED_ENV_VARS := DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD AWS_S3_ENDPOINT AWS_S3_ACCESS_KEY AWS_S3_SECRET_KEY AWS_S3_BUCKET_NAME AWS_REGION STAGING_SOURCE_ROOT
 
-.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load dbt-deps dbt-debug dbt-run dbt-test pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
+.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load nws-flatten dbt-deps dbt-debug dbt-run dbt-test pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
 
 help:
 	@printf "%s\n" \
@@ -37,6 +38,7 @@ help:
 		"  migrate            Run existing SQL migrations." \
 		"  sd-fetch           Download SD city data files to object store." \
 		"  stage-load         Run the existing staging loader." \
+		"  nws-flatten        Flatten NWS observation JSON from S3 into CSV." \
 		"  dbt-deps           Install dbt packages for sdpipe_transforms." \
 		"  dbt-debug          Validate the dbt connection/profile." \
 		"  dbt-run            Run dbt models from sdpipe_transforms." \
@@ -143,6 +145,9 @@ sd-fetch: check-env  ## Download SD city data files to object store
 
 stage-load:
 	@PYTHONPATH="$(PYTHONPATH)" STAGING_RUN_DATE="$(RUN_DATE)" "$(PYTHON)" -m pipeline.staging.load_staging
+
+nws-flatten:
+	@PYTHONPATH="$(PYTHONPATH)" NWS_FLATTEN_RUN_DATE="$(RUN_DATE)" NWS_FLATTEN_END_DATE="$(END_DATE)" "$(PYTHON)" -m pipeline.weather.nws_observation_flattener
 
 dbt-deps:
 	@"$(DBT)" deps --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"

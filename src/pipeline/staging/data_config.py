@@ -14,6 +14,7 @@ class StagingDataConfig:
     timestamp_columns: tuple[str, ...] = ()
     generated_columns: tuple[str, ...] = ()
     column_renames: dict[str, str] = field(default_factory=dict)
+    truncate_before_load: bool = True
 
 COLLISIONS_STAGING_BASIC = StagingDataConfig(
     name="staging_collisions_basic",
@@ -110,8 +111,43 @@ COLLISIONS_STAGING_BEATS = StagingDataConfig(
     column_renames={"objectid": "object_id"}
 )
 
+NWS_OBSERVATIONS = StagingDataConfig(
+    name="nws_observations",
+    table_name="raw.nws_observations",
+    daily_file_name="nws_observations.csv",
+    truncate_before_load=False,
+    columns=(
+        "station_id",
+        "station_name",
+        "observation_timestamp",
+        "latitude",
+        "longitude",
+        "text_description",
+        "temperature_c",
+        "wind_direction_deg",
+        "wind_speed_kmh",
+        "wind_gust_kmh",
+        "visibility_m",
+        "precip_last_1h_mm",
+        "precip_last_3h_mm",
+        "precip_last_6h_mm",
+        "cloud_cover",
+        "cloud_base_m",
+        "captured_at_utc",
+    ),
+    required_columns=(
+        "station_id",
+        "station_name",
+        "observation_timestamp",
+        "latitude",
+        "longitude",
+        "captured_at_utc",
+    ),
+)
+
 STAGING_DATASETS: tuple[StagingDataConfig, ...] = (
     COLLISIONS_STAGING_BASIC,
     COLLISIONS_STAGING_DETAILS,
-    COLLISIONS_STAGING_BEATS
+    COLLISIONS_STAGING_BEATS,
+    NWS_OBSERVATIONS,
 )

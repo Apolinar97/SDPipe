@@ -116,23 +116,36 @@ def _truncate_table(cur, table_name: str) -> int:
     cur.execute(f"TRUNCATE TABLE {table_name}")
     return existing_rows
 
+def _delete_by_snapshot(cur, table_name: str, snapshot_dt: date) -> int:
+    cur.execute(
+        f"DELETE FROM {table_name} WHERE snapshot_dt = %(snapshot_dt)s",
+        {"snapshot_dt": snapshot_dt},
+    )
+    return cur.rowcount
+
 def _preflight_resolve_sources(run_date: date, store: ObjectStore) -> dict[str, str]:
     resolved_keys: dict[str, str] = {}
-    source_errors: list[str] = []
+    skipped: list[str] = []
 
     for config in STAGING_DATASETS:
         try:
             resolved_keys[config.name] = _resolve_source_key(config, run_date, store)
         except Exception as exc:
-            source_errors.append(f"{config.name}: {exc}")
+            logger.warning("Source not available, skipping: dataset=%s reason=%s", config.name, exc)
+            skipped.append(config.name)
 
-    if source_errors:
-        logger.error("Preflight failed: not all files available for run_date=%s", run_date.isoformat())
-        for err in source_errors:
-            logger.error("Missing/invalid source: %s", err)
-        raise RuntimeError("Preflight source validation failed.")
+    if not resolved_keys:
+        raise RuntimeError(
+            f"Preflight failed: no source files available for run_date={run_date.isoformat()}"
+        )
 
-    logger.info("Preflight passed: run_date=%s datasets=%s", run_date.isoformat(), len(resolved_keys))
+    logger.info(
+        "Preflight complete: run_date=%s available=%d skipped=%d skipped_datasets=%s",
+        run_date.isoformat(),
+        len(resolved_keys),
+        len(skipped),
+        skipped or "none",
+    )
     return resolved_keys
 
 def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectStore, key: str) -> int:
@@ -151,11 +164,18 @@ def load_data_set(config: StagingDataConfig, cur, run_date: date, store: ObjectS
         text_stream = io.TextIOWrapper(stream, encoding="utf-8")
         reader = csv.DictReader(text_stream)
         _validate_header(config, reader.fieldnames)
-        truncated_rows = _truncate_table(cur, config.table_name)
-        logger.info(
-            "Truncated table before load: dataset=%s table=%s truncated_rows=%s",
-            config.name, config.table_name, truncated_rows,
-        )
+        if config.truncate_before_load:
+            removed_rows = _truncate_table(cur, config.table_name)
+            logger.info(
+                "Truncated table before load: dataset=%s table=%s truncated_rows=%s",
+                config.name, config.table_name, removed_rows,
+            )
+        else:
+            removed_rows = _delete_by_snapshot(cur, config.table_name, snapshot_dt)
+            logger.info(
+                "Deleted existing rows for snapshot: dataset=%s table=%s snapshot_dt=%s deleted_rows=%s",
+                config.name, config.table_name, snapshot_dt, removed_rows,
+            )
         insert_sql = _build_insert_sql(config)
         batch: list[tuple[object, ...]] = []
         for row_num, row in enumerate(reader, start=2):
@@ -190,6 +210,8 @@ def main() -> None:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 for config in STAGING_DATASETS:
+                    if config.name not in resolved_keys:
+                        continue
                     key = resolved_keys[config.name]
                     total_inserted_rows += load_data_set(config, cur, run_date, store, key)
         logger.info("Staging load committed: run_date=%s total_rows=%s", run_date.isoformat(), total_inserted_rows)

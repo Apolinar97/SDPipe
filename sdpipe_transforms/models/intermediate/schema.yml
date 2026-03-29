@@ -56,3 +56,19 @@ models:
         description: 'Always true in this filtered audit model'
         tests:
           - not_null
+  - name: int_nws_observations
+    description: 'Deduplicated NWS weather observations at observation grain, with one row per station + observation timestamp.'
+    columns:
+      - name: observation_id
+        description: 'Surrogate key built from station_id and observation_timestamp'
+        tests:
+          - unique
+          - not_null
+      - name: station_id
+        description: 'NOAA station identifier (e.g. KSAN)'
+        tests:
+          - not_null
+      - name: observation_timestamp
+        description: 'UTC timestamp of the weather observation'
+        tests:
+          - not_null

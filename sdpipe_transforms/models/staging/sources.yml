@@ -14,3 +14,5 @@ sources:
         description: "Raw collision details records loaded from SDPD CSV"
       - name: collisions_beats
         description: "Raw SDPD police beat reference data loaded from CSV"
+      - name: nws_observations
+        description: "Flattened NWS weather observations from NOAA API"
