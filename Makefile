@@ -9,13 +9,8 @@ endif
 export
 
 VENV ?= $(CURDIR)/venv
-ifneq ("$(wildcard $(VENV)/bin/python)","")
-  PYTHON := $(VENV)/bin/python
-  DBT := $(VENV)/bin/dbt
-else
-  PYTHON := python3
-  DBT := dbt
-endif
+PYTHON := $(shell test -x "$(VENV)/bin/python" && echo "$(VENV)/bin/python" || echo python3)
+DBT := $(shell test -x "$(VENV)/bin/dbt" && echo "$(VENV)/bin/dbt" || echo dbt)
 PYTHONPATH := $(CURDIR)/src
 DBT_PROJECT_DIR := $(CURDIR)/sdpipe_transforms
 DBT_PROFILES_DIR ?= $(HOME)/.dbt
@@ -178,8 +173,8 @@ pipeline: check-tools check-env check-dbt-profile sd-fetch stage-load dbt-run db
 
 run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-seed dbt-debug sd-fetch stage-load dbt-run dbt-test
 
-RUFF := $(VENV)/bin/ruff
-SQLFLUFF := $(VENV)/bin/sqlfluff
+RUFF := $(shell test -x "$(VENV)/bin/ruff" && echo "$(VENV)/bin/ruff" || echo ruff)
+SQLFLUFF := $(shell test -x "$(VENV)/bin/sqlfluff" && echo "$(VENV)/bin/sqlfluff" || echo sqlfluff)
 
 lint-py:
 	@"$(RUFF)" check src/ scripts/
