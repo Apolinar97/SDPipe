@@ -9,8 +9,13 @@ endif
 export
 
 VENV ?= $(CURDIR)/venv
-PYTHON := $(VENV)/bin/python
-DBT := $(VENV)/bin/dbt
+ifneq ("$(wildcard $(VENV)/bin/python)","")
+  PYTHON := $(VENV)/bin/python
+  DBT := $(VENV)/bin/dbt
+else
+  PYTHON := python3
+  DBT := dbt
+endif
 PYTHONPATH := $(CURDIR)/src
 DBT_PROJECT_DIR := $(CURDIR)/sdpipe_transforms
 DBT_PROFILES_DIR ?= $(HOME)/.dbt
