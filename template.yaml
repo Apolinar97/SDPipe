@@ -46,6 +46,8 @@ Conditions:
 Resources:
   NwsCaptureFunction:
     Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: makefile
     Properties:
       FunctionName: !Sub sdpipe-nws-capture-${EnvironmentName}
       CodeUri: src/

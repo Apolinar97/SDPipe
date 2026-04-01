@@ -112,6 +112,30 @@ models:
               to: ref('dim_date')
               field: date_key
 
+  - name: map_beat_station
+    description: Maps each police beat to its nearest NWS weather station; enables joining collision and weather data
+    columns:
+      - name: beat
+        description: Police beat integer code (natural key)
+        tests:
+          - unique
+          - not_null
+      - name: beat_key
+        description: Surrogate key over (beat), FK to dim_beat
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_beat')
+              field: beat_key
+              severity: warn
+      - name: station_key
+        description: Surrogate key over (station_id), FK to dim_weather_station
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_weather_station')
+              field: station_key
+
   - name: fct_collision_participants
     description: Fact table at participant grain — one row per person involved in a collision
     columns:

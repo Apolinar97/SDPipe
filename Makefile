@@ -19,7 +19,7 @@ END_DATE ?=
 
 REQUIRED_ENV_VARS := DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD AWS_S3_ENDPOINT AWS_S3_ACCESS_KEY AWS_S3_SECRET_KEY AWS_S3_BUCKET_NAME AWS_REGION STAGING_SOURCE_ROOT
 
-.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load nws-flatten dbt-deps dbt-debug dbt-run dbt-test pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
+.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load nws-flatten seed-csv dbt-deps dbt-seed dbt-debug dbt-run dbt-test pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
 
 help:
 	@printf "%s\n" \
@@ -39,7 +39,9 @@ help:
 		"  sd-fetch           Download SD city data files to object store." \
 		"  stage-load         Run the existing staging loader." \
 		"  nws-flatten        Flatten NWS observation JSON from S3 into CSV." \
+		"  seed-csv           Generate beat_station_mapping CSV from JSON for dbt seed." \
 		"  dbt-deps           Install dbt packages for sdpipe_transforms." \
+		"  dbt-seed           Load dbt seed files into the warehouse." \
 		"  dbt-debug          Validate the dbt connection/profile." \
 		"  dbt-run            Run dbt models from sdpipe_transforms." \
 		"  dbt-test           Run dbt tests from sdpipe_transforms." \
@@ -149,11 +151,17 @@ stage-load:
 nws-flatten:
 	@PYTHONPATH="$(PYTHONPATH)" NWS_FLATTEN_RUN_DATE="$(RUN_DATE)" NWS_FLATTEN_END_DATE="$(END_DATE)" "$(PYTHON)" -m pipeline.weather.nws_observation_flattener
 
+seed-csv:
+	@PYTHONPATH="$(PYTHONPATH)" "$(PYTHON)" scripts/generate_seed_csv.py
+
 dbt-deps:
 	@"$(DBT)" deps --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
 
 dbt-debug:
 	@"$(DBT)" debug --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
+
+dbt-seed:
+	@"$(DBT)" seed --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
 
 dbt-run:
 	@"$(DBT)" run --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
@@ -163,7 +171,7 @@ dbt-test:
 
 pipeline: check-tools check-env check-dbt-profile sd-fetch stage-load dbt-run dbt-test
 
-run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-debug sd-fetch stage-load dbt-run dbt-test
+run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-seed dbt-debug sd-fetch stage-load dbt-run dbt-test
 
 RUFF := $(VENV)/bin/ruff
 SQLFLUFF := $(VENV)/bin/sqlfluff

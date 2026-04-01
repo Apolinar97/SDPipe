@@ -1,4 +1,0 @@
-ruff
-sqlfluff
-sqlfluff-templater-dbt
-pre-commit
