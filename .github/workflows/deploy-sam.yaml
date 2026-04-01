@@ -6,10 +6,14 @@ on:
       - main
     paths:
       - template.yaml
-      - src/**
       - src/requirements.txt
+      - src/pipeline/__init__.py
+      - src/pipeline/logging_config.py
+      - src/pipeline/config/**
+      - src/pipeline/storage/**
+      - src/pipeline/weather/**
+      - src/Makefile
       - .github/workflows/deploy-sam.yaml
-      - infra/bootstrap/github-oidc-bootstrap.yaml
   workflow_dispatch:
 
 permissions:

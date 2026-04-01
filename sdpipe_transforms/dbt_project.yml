@@ -22,6 +22,15 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+seeds:
+  sdpipe_transforms:
+    beat_station_mapping:
+      +schema: raw
+      +column_types:
+        beat: integer
+        station_id: varchar(10)
+        distance_to_station_km: numeric(6,2)
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
