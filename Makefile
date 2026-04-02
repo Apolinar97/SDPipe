@@ -149,7 +149,7 @@ stage-load:
 	@PYTHONPATH="$(PYTHONPATH)" STAGING_RUN_DATE="$(RUN_DATE)" "$(PYTHON)" -m pipeline.staging.load_staging
 
 nws-flatten:
-	@PYTHONPATH="$(PYTHONPATH)" NWS_FLATTEN_RUN_DATE="$(RUN_DATE)" NWS_FLATTEN_END_DATE="$(END_DATE)" "$(PYTHON)" -m pipeline.weather.nws_observation_flattener
+	@PYTHONPATH="$(PYTHONPATH)" NWS_FLATTEN_END_DATE="$(END_DATE)" "$(PYTHON)" -m pipeline.weather.nws_observation_flattener
 
 seed-csv:
 	@PYTHONPATH="$(PYTHONPATH)" "$(PYTHON)" scripts/generate_seed_csv.py
@@ -169,9 +169,9 @@ dbt-run:
 dbt-test:
 	@"$(DBT)" test --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
 
-pipeline: check-tools check-env check-dbt-profile sd-fetch stage-load dbt-run dbt-test
+pipeline: check-tools check-env check-dbt-profile sd-fetch nws-flatten stage-load dbt-run dbt-test
 
-run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-seed dbt-debug sd-fetch stage-load dbt-run dbt-test
+run: check-tools check-env check-dbt-profile up wait migrate dbt-deps dbt-seed dbt-debug sd-fetch nws-flatten stage-load dbt-run dbt-test
 
 RUFF := $(shell test -x "$(VENV)/bin/ruff" && echo "$(VENV)/bin/ruff" || echo ruff)
 SQLFLUFF := $(shell test -x "$(VENV)/bin/sqlfluff" && echo "$(VENV)/bin/sqlfluff" || echo sqlfluff)

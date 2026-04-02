@@ -134,10 +134,16 @@ def _parse_date(raw: str | None, env_var: str) -> date | None:
 
 def _get_date_range() -> tuple[date, date]:
     today = datetime.now(timezone.utc).date()
-    start = _parse_date(os.getenv("NWS_FLATTEN_RUN_DATE"), "NWS_FLATTEN_RUN_DATE") or today
+    yesterday = today - timedelta(days=1)
+    start = _parse_date(os.getenv("NWS_FLATTEN_RUN_DATE"), "NWS_FLATTEN_RUN_DATE") or yesterday
     end = _parse_date(os.getenv("NWS_FLATTEN_END_DATE"), "NWS_FLATTEN_END_DATE") or start
     if end < start:
         raise RuntimeError(f"NWS_FLATTEN_END_DATE ({end}) must be >= NWS_FLATTEN_RUN_DATE ({start})")
+    if end >= today:
+        raise RuntimeError(
+            f"Cannot flatten incomplete day: end_date={end} is today or in the future. "
+            f"Only fully completed days (before {today}) can be processed."
+        )
     return start, end
 
 
