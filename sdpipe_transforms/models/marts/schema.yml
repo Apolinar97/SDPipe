@@ -105,12 +105,16 @@ models:
               to: ref('dim_weather_station')
               field: station_key
       - name: date_key
-        description: FK to dim_date (YYYYMMDD integer derived from observation_date)
+        description: FK to dim_date (YYYYMMDD integer derived from observation_date_local, San Diego time)
         tests:
           - not_null
           - relationships:
               to: ref('dim_date')
               field: date_key
+      - name: observation_hour_local
+        description: 'Hour (0-23) in San Diego local time; join to fct_collisions.report_hour for weather-collision alignment'
+        tests:
+          - not_null
 
   - name: map_beat_station
     description: Maps each police beat to its nearest NWS weather station; enables joining collision and weather data

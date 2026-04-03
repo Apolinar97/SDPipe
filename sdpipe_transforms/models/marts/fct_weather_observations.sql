@@ -7,9 +7,12 @@ WITH obs AS (
 SELECT
     observation_id,
     {{ dbt_utils.generate_surrogate_key(['station_id']) }} AS station_key,
-    CAST(TO_CHAR(observation_date, 'YYYYMMDD') AS INTEGER) AS date_key,
+    CAST(TO_CHAR(observation_date_local, 'YYYYMMDD') AS INTEGER) AS date_key,
     observation_timestamp,
     observation_hour,
+    observation_timestamp_local,
+    observation_date_local,
+    observation_hour_local,
     temperature_c,
     wind_direction_deg,
     wind_speed_kmh,
