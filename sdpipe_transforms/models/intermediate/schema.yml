@@ -72,3 +72,15 @@ models:
         description: 'UTC timestamp of the weather observation'
         tests:
           - not_null
+      - name: observation_timestamp_local
+        description: 'Observation timestamp in San Diego local time (America/Los_Angeles)'
+        tests:
+          - not_null
+      - name: observation_date_local
+        description: 'Date in San Diego local time'
+        tests:
+          - not_null
+      - name: observation_hour_local
+        description: 'Hour (0-23) in San Diego local time, suitable for joining with collision report_hour'
+        tests:
+          - not_null

@@ -40,9 +40,18 @@ SELECT
     source_file,
     load_ts,
 
-    -- Derived
+    -- Derived (UTC)
     observation_timestamp::date AS observation_date,
     EXTRACT(HOUR FROM observation_timestamp) AS observation_hour,
+
+    -- Derived (San Diego local time)
+    observation_timestamp AT TIME ZONE 'America/Los_Angeles'
+        AS observation_timestamp_local,
+    (observation_timestamp AT TIME ZONE 'America/Los_Angeles')::date
+        AS observation_date_local,
+    EXTRACT(
+        HOUR FROM observation_timestamp AT TIME ZONE 'America/Los_Angeles'
+    ) AS observation_hour_local,
     NULLIF(TRIM(text_description), '') AS text_description,
     NULLIF(TRIM(cloud_cover), '') AS cloud_cover
 

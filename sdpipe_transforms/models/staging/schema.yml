@@ -55,7 +55,19 @@ models:
         tests:
           - not_null
       - name: observation_date
-        description: 'Date extracted from observation_timestamp'
+        description: 'Date extracted from observation_timestamp (UTC)'
+        tests:
+          - not_null
+      - name: observation_timestamp_local
+        description: 'Observation timestamp converted to San Diego local time (America/Los_Angeles)'
+        tests:
+          - not_null
+      - name: observation_date_local
+        description: 'Date in San Diego local time, derived from observation_timestamp_local'
+        tests:
+          - not_null
+      - name: observation_hour_local
+        description: 'Hour (0-23) in San Diego local time'
         tests:
           - not_null
       - name: latitude
