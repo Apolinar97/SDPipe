@@ -74,6 +74,10 @@ models:
           - relationships:
               to: ref('dim_beat')
               field: beat_key
+      - name: station_key
+        description: FK to dim_weather_station (via map_beat_station); NULL if beat has no station mapping
+      - name: observation_id
+        description: FK to fct_weather_observations (matched by station, date, and hour); NULL when no exact-hour observation exists
 
   - name: dim_weather_station
     description: NOAA weather station dimension — one row per station; metadata from the most recent observation
