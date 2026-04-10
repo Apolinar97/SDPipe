@@ -21,7 +21,7 @@ SELECT
     EXTRACT(QUARTER FROM date_day)::integer AS quarter_number,
     EXTRACT(YEAR FROM date_day)::integer AS year_number,
     (TO_CHAR(date_day, 'YYYYMMDD'))::integer AS date_key,
-    TO_CHAR(date_day, 'Day') AS day_of_week_name,
-    TO_CHAR(date_day, 'Month') AS month_name,
+    TRIM(TO_CHAR(date_day, 'Day')) AS day_of_week_name,
+    TRIM(TO_CHAR(date_day, 'Month')) AS month_name,
     EXTRACT(DOW FROM date_day) IN (0, 6) AS is_weekend
 FROM dates
