@@ -15,7 +15,10 @@ dates AS (
 
 SELECT
     date_day,
-    EXTRACT(DOW FROM date_day)::integer AS day_of_week,
+    CASE
+        WHEN EXTRACT(DOW FROM date_day) = 0 THEN 7
+        ELSE EXTRACT(DOW FROM date_day)::integer
+    END AS day_of_week,
     EXTRACT(DAY FROM date_day)::integer AS day_of_month,
     EXTRACT(MONTH FROM date_day)::integer AS month_number,
     EXTRACT(QUARTER FROM date_day)::integer AS quarter_number,
