@@ -59,12 +59,25 @@ all_beats AS (
         service_area,
         neighborhood_name
     FROM fallback_beats
+),
+
+beat_map_points AS (
+    SELECT
+        beat,
+        map_lat,
+        map_lon
+    FROM {{ ref('beat_station_mapping') }}
 )
 
 SELECT
-    {{ dbt_utils.generate_surrogate_key(['beat']) }} AS beat_key,
-    beat,
-    division,
-    service_area,
-    neighborhood_name
-FROM all_beats
+    {{ dbt_utils.generate_surrogate_key(['ab.beat']) }} AS beat_key,
+    ab.beat,
+    ab.division,
+    ab.service_area,
+    ab.neighborhood_name,
+    bm.map_lat,
+    bm.map_lon,
+    (bm.map_lat IS NOT NULL AND bm.map_lon IS NOT NULL) AS is_geo_valid
+FROM all_beats AS ab
+LEFT JOIN beat_map_points AS bm
+    ON ab.beat = bm.beat

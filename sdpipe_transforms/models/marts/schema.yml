@@ -44,6 +44,18 @@ models:
         tests:
           - unique
           - not_null
+      - name: map_lat
+        description: Latitude of a point guaranteed to be inside the beat polygon (Shapely representative_point); use for map pin/label placement
+      - name: map_lon
+        description: Longitude of a point guaranteed to be inside the beat polygon (Shapely representative_point); use for map pin/label placement
+      - name: is_geo_valid
+        description: >
+          True when this beat has valid map coordinates (map_lat and map_lon are both
+          populated). False for orphan beats that appear in collision data but have no
+          entry in the beat reference file. Use this flag to exclude unmappable beats
+          from map visuals without filtering them out of aggregate counts.
+        data_tests:
+          - not_null
 
   - name: fct_collisions
     description: Fact table at collision grain — one row per collision report; owns injured/killed, date, beat, and violation context

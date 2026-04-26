@@ -10,7 +10,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = PROJECT_ROOT / "beat_station_mapping_V1.json"
 CSV_PATH = PROJECT_ROOT / "sdpipe_transforms" / "seeds" / "beat_station_mapping.csv"
 
-SEED_COLUMNS = ["beat", "station_id", "distance_to_station_km"]
+SEED_COLUMNS = ["beat", "station_id", "distance_to_station_km", "map_lat", "map_lon"]
 
 logger = get_logger(__name__)
 
@@ -29,6 +29,8 @@ def main() -> None:
                 "beat": entry["beat"],
                 "station_id": entry["station_id"],
                 "distance_to_station_km": entry["distance_to_station_km"],
+                "map_lat": entry["representative_lat"],
+                "map_lon": entry["representative_lon"],
             }
             for entry in mappings
         ),
