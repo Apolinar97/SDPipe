@@ -19,7 +19,7 @@ END_DATE ?=
 
 REQUIRED_ENV_VARS := DB_HOST DB_PORT DB_NAME DB_USER DB_PASSWORD AWS_S3_ENDPOINT AWS_S3_ACCESS_KEY AWS_S3_SECRET_KEY AWS_S3_BUCKET_NAME AWS_REGION STAGING_SOURCE_ROOT
 
-.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load nws-flatten seed-csv dbt-deps dbt-seed dbt-debug dbt-run dbt-test pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
+.PHONY: help check-tools check-env check-dbt-profile up down ps logs wait-db wait-minio wait migrate sd-fetch stage-load nws-flatten seed-csv dbt-deps dbt-seed dbt-debug dbt-run dbt-test dbt-docs ai-context pipeline run lint-py lint-sql lint fmt-py fmt-sql fmt
 
 help:
 	@printf "%s\n" \
@@ -53,6 +53,8 @@ help:
 		"  fmt-py             Auto-format Python code with Ruff." \
 		"  fmt-sql            Auto-fix SQL models with SQLFluff." \
 		"  fmt                Auto-format all code (Ruff + SQLFluff)." \
+		"  dbt-docs           Generate dbt docs artifacts (manifest.json + catalog.json)." \
+		"  ai-context         Build ai_context.json for AI SQL agent (requires services running)." \
 		"" \
 		"Overridable variables:" \
 		"  RUN_DATE           Defaults to STAGING_RUN_DATE or today's date." \
@@ -168,6 +170,12 @@ dbt-run:
 
 dbt-test:
 	@"$(DBT)" test --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
+
+dbt-docs:
+	@"$(DBT)" docs generate --project-dir "$(DBT_PROJECT_DIR)" --profiles-dir "$(DBT_PROFILES_DIR)"
+
+ai-context: dbt-docs
+	@"$(PYTHON)" scripts/build_ai_context.py
 
 pipeline: check-tools check-env check-dbt-profile sd-fetch nws-flatten stage-load dbt-run dbt-test
 
