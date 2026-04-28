@@ -27,6 +27,7 @@ MANIFEST
 
 # Virtual environments
 .venv/
+.venv-agent/
 venv/
 env/
 ENV/

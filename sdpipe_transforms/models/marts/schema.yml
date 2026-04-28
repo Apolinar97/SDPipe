@@ -10,8 +10,25 @@ models:
           - unique
           - not_null
       - name: date_day
+        description: Calendar date (DATE); spine runs from 2015-01-01 to current date
         tests:
           - not_null
+      - name: day_of_week
+        description: Day number where 1 = Monday and 7 = Sunday (PostgreSQL DOW 0 remapped to 7)
+      - name: day_of_month
+        description: Day of the month (1–31)
+      - name: month_number
+        description: Month number (1–12)
+      - name: quarter_number
+        description: Calendar quarter (1–4)
+      - name: year_number
+        description: Four-digit calendar year
+      - name: day_of_week_name
+        description: Full day name (e.g., 'Monday'); trailing spaces trimmed
+      - name: month_name
+        description: Full month name (e.g., 'January'); trailing spaces trimmed
+      - name: is_weekend
+        description: True if Saturday (DOW 6) or Sunday (DOW 0)
 
   - name: dim_violation
     description: Distinct violation profiles from collision reports
@@ -21,6 +38,12 @@ models:
         tests:
           - unique
           - not_null
+      - name: violation_section
+        description: CVC or local ordinance section number for the primary violation charge
+      - name: violation_type
+        description: SDPD violation type code (e.g., 'VC', 'BP')
+      - name: primary_violation_description
+        description: Human-readable description of the primary violation charge (from raw charge_desc)
 
   - name: dim_person
     description: Distinct participant profiles from collision details
@@ -30,6 +53,18 @@ models:
         tests:
           - unique
           - not_null
+      - name: person_role
+        description: Role of this person in the collision (e.g., driver, passenger, pedestrian)
+      - name: person_injury_level
+        description: Injury severity for this person (e.g., fatal, severe injury, complaint of pain)
+      - name: person_vehicle_type
+        description: Vehicle type category associated with this person (from raw person_veh_type)
+      - name: vehicle_type
+        description: Type of vehicle involved (e.g., automobile, motorcycle, bicycle)
+      - name: vehicle_make
+        description: Vehicle manufacturer (e.g., Toyota, Honda); NULL if unknown
+      - name: vehicle_model
+        description: Vehicle model name; NULL if unknown
 
   - name: dim_beat
     description: Police beat dimension from SDPD reference data; includes fallback rows for orphan and unspecified beats
@@ -44,6 +79,12 @@ models:
         tests:
           - unique
           - not_null
+      - name: division
+        description: SDPD division the beat belongs to (e.g., 'Central', 'Northern'); 'Unknown' for unrecognized beats, 'Unspecified' for beat code 999
+      - name: service_area
+        description: SDPD service area designation; 'Unknown' for unrecognized beats, 'Unspecified' for beat code 999
+      - name: neighborhood_name
+        description: Neighborhood name for this beat; 'Unknown' for unrecognized beats, 'Unspecified' for beat code 999
       - name: map_lat
         description: Latitude of a point guaranteed to be inside the beat polygon (Shapely representative_point); use for map pin/label placement
       - name: map_lon
@@ -86,10 +127,80 @@ models:
           - relationships:
               to: ref('dim_beat')
               field: beat_key
+      - name: report_date
+        description: Date the collision occurred (DATE), cast from report_datetime
+      - name: report_datetime
+        description: Full timestamp of the collision as recorded by SDPD (from raw date_time)
+      - name: report_hour
+        description: Hour of day (0–23) when the collision occurred, extracted from report_datetime
+      - name: police_beat
+        description: Police beat code where the collision occurred; natural key, matches dim_beat.beat
+      - name: street_number
+        description: Street number of the collision address; NULL if not reported (raw address_no_primary)
+      - name: street_direction
+        description: Directional prefix of the primary street (e.g., 'N', 'S'); NULL if not reported
+      - name: street_name
+        description: Name of the primary street where the collision occurred
+      - name: street_type
+        description: Street type suffix of the primary street (e.g., 'ST', 'AVE', 'BLVD'); NULL if not reported
+      - name: intersection_direction
+        description: Directional descriptor at the intersecting street; NULL for mid-block collisions
+      - name: intersecting_street
+        description: Name of the cross street; NULL for mid-block collisions
+      - name: intersecting_street_type
+        description: Street type suffix of the intersecting street; NULL if not an intersection
+      - name: violation_section
+        description: CVC or ordinance section number (denormalized from dim_violation)
+      - name: violation_type
+        description: SDPD violation type code (denormalized from dim_violation)
+      - name: primary_violation_description
+        description: Human-readable violation charge (denormalized from dim_violation)
+      - name: injured
+        description: Total people injured in this collision per SDPD report; report-level count — do not sum across fct_collision_participants rows (would double-count)
+      - name: killed
+        description: Total people killed in this collision per SDPD report; report-level count — same caveat as injured
+      - name: participant_count
+        description: Number of participant records in fct_collision_participants for this report; 0 if no detail rows were loaded
+      - name: hit_run_level
+        description: Hit-and-run classification from SDPD source data (from raw hit_run_lvl); NULL if not a hit-and-run
+      - name: is_fatal
+        description: True if killed > 0
+      - name: has_injuries
+        description: True if injured > 0
+      - name: is_hit_and_run
+        description: True if hit_run_level is not null
+      - name: is_intersection_collision
+        description: True if intersecting_street is not null
       - name: station_key
         description: FK to dim_weather_station (via map_beat_station); NULL if beat has no station mapping
+      - name: distance_to_station_km
+        description: Haversine distance in km from this beat's centroid to its assigned weather station; NULL if no station mapping exists for the beat
       - name: observation_id
         description: FK to fct_weather_observations (matched by station, date, and hour); NULL when no exact-hour observation exists
+      - name: observation_hour_local
+        description: Hour (0–23) of the matched weather observation in San Diego local time; NULL if no same-hour observation exists
+      - name: temperature_c
+        description: Air temperature in Celsius from the nearest station at the collision hour; NULL if no observation matched
+      - name: wind_direction_deg
+        description: Wind direction in degrees (0–360) at the collision hour; NULL if no observation matched
+      - name: wind_speed_kmh
+        description: Sustained wind speed in km/h at the collision hour; NULL if no observation matched
+      - name: wind_gust_kmh
+        description: Wind gust speed in km/h at the collision hour; NULL if not reported or no observation matched
+      - name: visibility_m
+        description: Visibility in meters at the collision hour; NULL if no observation matched
+      - name: precip_last_1h_mm
+        description: Liquid precipitation in the last 1 hour in mm at the collision hour; NULL if not reported
+      - name: precip_last_3h_mm
+        description: Liquid precipitation in the last 3 hours in mm at the collision hour; NULL if not reported
+      - name: precip_last_6h_mm
+        description: Liquid precipitation in the last 6 hours in mm at the collision hour; NULL if not reported
+      - name: cloud_cover
+        description: Sky coverage description at the collision hour (e.g., 'FEW', 'SCT', 'BKN', 'OVC'); NULL if not reported
+      - name: cloud_base_m
+        description: Height of the cloud base in meters AGL at the collision hour; NULL if not reported
+      - name: weather_description
+        description: Free-text NWS weather summary at the collision hour (sourced from fct_weather_observations.text_description); NULL if no observation matched
 
   - name: dim_weather_station
     description: NOAA weather station dimension — one row per station; metadata from the most recent observation
@@ -104,6 +215,12 @@ models:
         tests:
           - unique
           - not_null
+      - name: station_name
+        description: Human-readable station name (e.g., 'San Diego International Airport'); sourced from the most recent observation
+      - name: latitude
+        description: Station latitude in decimal degrees (WGS84); from most recent observation
+      - name: longitude
+        description: Station longitude in decimal degrees (WGS84); from most recent observation
 
   - name: fct_weather_observations
     description: Fact table at observation grain — one row per station + observation timestamp
@@ -127,10 +244,40 @@ models:
           - relationships:
               to: ref('dim_date')
               field: date_key
+      - name: observation_timestamp
+        description: UTC timestamp of the observation as published by NWS
+      - name: observation_hour
+        description: Hour (0–23) of the observation in UTC, extracted from observation_timestamp
+      - name: observation_timestamp_local
+        description: Observation timestamp converted to San Diego local time (America/Los_Angeles timezone)
+      - name: observation_date_local
+        description: Date of the observation in San Diego local time (DATE)
       - name: observation_hour_local
         description: 'Hour (0-23) in San Diego local time; join to fct_collisions.report_hour for weather-collision alignment'
         tests:
           - not_null
+      - name: temperature_c
+        description: Air temperature in Celsius; NULL when the sensor data failed NWS QC or was unavailable
+      - name: wind_direction_deg
+        description: Wind direction in degrees (0–360); NULL if unavailable or QC failed
+      - name: wind_speed_kmh
+        description: Sustained wind speed in km/h; NULL if unavailable or QC failed
+      - name: wind_gust_kmh
+        description: Wind gust speed in km/h; NULL if not reported
+      - name: visibility_m
+        description: Horizontal visibility in meters; NULL if unavailable or QC failed
+      - name: precip_last_1h_mm
+        description: Liquid precipitation in the last 1 hour in mm; NULL if not reported
+      - name: precip_last_3h_mm
+        description: Liquid precipitation in the last 3 hours in mm; NULL if not reported
+      - name: precip_last_6h_mm
+        description: Liquid precipitation in the last 6 hours in mm; NULL if not reported
+      - name: cloud_cover
+        description: Sky coverage description (e.g., 'FEW', 'SCT', 'BKN', 'OVC', 'CLR'); NULL if not reported
+      - name: cloud_base_m
+        description: Height of the cloud base in meters AGL; NULL if not reported
+      - name: text_description
+        description: Free-text NWS weather summary for the observation (e.g., 'Mostly Cloudy and Windy'); NULL if not reported
 
   - name: map_beat_station
     description: Maps each police beat to its nearest NWS weather station; enables joining collision and weather data
@@ -155,6 +302,10 @@ models:
           - relationships:
               to: ref('dim_weather_station')
               field: station_key
+      - name: station_id
+        description: NOAA station identifier for the nearest station to this beat (e.g., 'KSAN')
+      - name: distance_to_station_km
+        description: Haversine distance in km from the beat centroid to the assigned weather station
 
   - name: fct_collision_participants
     description: Fact table at participant grain — one row per person involved in a collision
@@ -193,5 +344,8 @@ models:
               to: ref('dim_person')
               field: person_key
       - name: is_duplicate_participant
+        description: True if this participant row shares a content fingerprint with at least one other row in the same report (duplicate_group_size > 1)
         tests:
           - not_null
+      - name: duplicate_group_size
+        description: Number of participant rows sharing the same content fingerprint within a report; 1 = unique, > 1 = potential duplicate entry
