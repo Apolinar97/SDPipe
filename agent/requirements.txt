@@ -1,0 +1,4 @@
+tabulate
+psycopg2-binary
+rich
+sqlparse
